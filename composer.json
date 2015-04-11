@@ -1,8 +1,22 @@
 {
-	"require": {
-		"php": ">=5.4.0"
-	},
-	"autoload": {
-		"psr-4": {"NetPhp\\": "src/"}
+    "name": "drupalonwindows/netphp",
+	"version": "master",
+	"homepage": "http://www.drupalonwindows.com",
+	"type": "library",
+	"description": "",
+	"keywords": [".Net", "PHP", ".Net Framework", "Microsoft", "dotnet"],
+	"license": "MIT",
+	"authors": [
+	{
+		"name": "David García",
+		"email": "info@drupalonwindows.com",
+		"homepage": "http://www.drupalonwindows.com"
 	}
+	],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": { "NetPhp\\": "src/" }
+    }
 }
