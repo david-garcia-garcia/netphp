@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Name>NetPhp</Name>
+    <ProjectGuid>cbfee01e-95d9-4308-a73d-4814e519e685</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>NetPhp</RootNamespace>
+    <ProjectTypeGuids>{A0786B88-2ADB-4C21-ABE8-AA2D79766269}</ProjectTypeGuids>
+    <AssemblyName>NetPhp</AssemblyName>
+    <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+    <Server>Custom</Server>
+    <PublishEvent>None</PublishEvent>
+    <PHPDevAutoPort>True</PHPDevAutoPort>
+    <PHPDevPort>63529</PHPDevPort>
+    <PHPDevHostName>localhost</PHPDevHostName>
+    <IISProjectUrl>http://localhost:63529/</IISProjectUrl>
+    <CustomServerUrl>http://localhost</CustomServerUrl>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <IncludeDebugInformation>true</IncludeDebugInformation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <IncludeDebugInformation>false</IncludeDebugInformation>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="index.php" />
+    <Compile Include="src\Core\COMExceptionManager.php" />
+    <Compile Include="src\Core\ComProxy.php" />
+    <Compile Include="src\Core\Constants.php" />
+    <Compile Include="src\Core\MagicWrapper.php" />
+    <Compile Include="src\Core\MagicWrapperUtilities.php" />
+    <Compile Include="src\Core\NetManager.php" />
+    <Compile Include="src\Core\NetProxy.php" />
+    <Compile Include="src\Core\NetUtilities.php" />
+    <Compile Include="src\Core\ResolvedClass.php" />
+    <Compile Include="src\Core\TypeMapping.php" />
+    <Compile Include="src\Samples\AjaxMinSample.php" />
+    <Compile Include="src\Samples\XFiniumSamples.php" />
+    <Compile Include="src\Tests\PHPTypes.php" />
+    <Compile Include="vendor\autoload.php" />
+    <Compile Include="vendor\composer\autoload_classmap.php" />
+    <Compile Include="vendor\composer\autoload_namespaces.php" />
+    <Compile Include="vendor\composer\autoload_psr4.php" />
+    <Compile Include="vendor\composer\autoload_real.php" />
+    <Compile Include="vendor\composer\ClassLoader.php" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="composer.json" />
+    <Content Include="composer.lock" />
+    <Content Include="web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\" />
+    <Folder Include="src\Core\" />
+    <Folder Include="src\Samples\" />
+    <Folder Include="src\Tests\" />
+    <Folder Include="vendor\" />
+    <Folder Include="vendor\composer\" />
+  </ItemGroup>
+</Project>
