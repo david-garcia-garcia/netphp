@@ -30,4 +30,19 @@ class MagicWrapperUtilities extends ComProxy {
   public function GetTypeAsString($object) {
     return (string) $this->host->GetTypeAsString($object);
   }
+  
+  /**
+   * Just for experimenting .Net to PHP native type conversions.
+   */
+  public function GetTypeSample($index) {
+    return $this->host->GetTypeSample($index);
+  }
+  
+  /**
+   * Returns a MagicWrapped instance of List<string>
+   */
+  public function GetIteratorSample() {
+    $instance = MagicWrapper::Get()->Wrap($this->host->GetIteratorSample());
+    return $instance;
+  }
 }

@@ -139,4 +139,36 @@ class MagicWrapper extends ComProxy {
     self::ManageExceptions();
     return $result;
   }
+  
+  //*****************************************************
+  // Start iterator section.
+  //*****************************************************
+  
+  public function iterator_current() {
+    $result = $this->host->iterator_current();
+    self::ManageExceptions();
+    return static::Get()->Wrap($result);
+  }
+  
+  public function iterator_valid() {
+    $result = $this->host->iterator_valid();
+    self::ManageExceptions();
+    return$result;
+  }
+  
+  public function iterator_rewind() {
+    $this->host->iterator_rewind();
+    self::ManageExceptions();
+  }
+  
+  public function iterator_next() {
+    $this->host->iterator_next();
+    self::ManageExceptions();
+  }
+  
+  public function iterator_key() {
+    $result = $this->host->iterator_key();
+    self::ManageExceptions();
+    return static::Get()->Wrap($result);
+  }
 }

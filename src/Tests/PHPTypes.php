@@ -30,5 +30,22 @@ class PHPTypes {
       $item['netType'] = \NetPhp\Core\NetUtilities::GetTypeAsString($item['data']);
       $mappings[$php_type] = $item['netType'];
     }
+    
+    // Try some .Net to PHP native COM conversions and see what they throw.
+    $utils = \NetPhp\Core\MagicWrapperUtilities::GetInstance();
+    
+    $locals = array();
+    for($x = 0; $x < 8; $x ++){
+      $locals[] = $utils->GetTypeSample($x);
+    }
+    
+    // Get an instance of List<String>
+    $mylist = \NetPhp\Core\NetProxyCollection::Get($utils->GetIteratorSample());
+    
+    // Keys are brought back as native types.
+    // Values are NetProxy's
+    foreach($mylist as $key => $value) {
+      $real_value = $value->Val();
+    }
   } 
 }

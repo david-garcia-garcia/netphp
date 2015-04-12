@@ -35,17 +35,26 @@ class NetProxy {
   }
 
   // @var MagicWrapper $host
-  private $wrapper;
+  protected $wrapper;
 
-  function __construct($host) {
+  private function __construct($host) {
     $this->wrapper = $host;
+  }
+  
+  public static function Get($host) {
+    if (!is_a($host, MagicWrapper::class)) {
+      throw new \Exception('Net Proxy can only wrap over MagicWrapper');
+    }
+    
+    $instance = new NetProxy($host);
+    return $instance;
   }
 
   function __call($method, $args) {
     NetProxyUtils::UnpackParameters($args);
     $this->checkForbiddenMethods($method);
     $result = $this->wrapper->CallMethod($method, $args);
-    return new NetProxy($result);
+    return NetProxy::Get($result);
   }
 
   function __set($name, $value){
@@ -55,7 +64,7 @@ class NetProxy {
 
   function __get($name){
     $result =  $this->wrapper->PropertyGet($name);
-    return new NetProxy($result);
+    return NetProxy::Get($result);
   }
   
   /**

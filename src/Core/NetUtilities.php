@@ -43,7 +43,7 @@ class NetUtilities {
    */
   public static function GetTypeAsString($object) {
     static::EnsureLoaded();
-    NetManager::UnpackParameter($object);
+    NetProxyUtils::UnpackParameter($object);
     $result = static::$utils->GetTypeAsString($object);
     return $result;
   }
