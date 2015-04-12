@@ -88,6 +88,10 @@ class NetProxy {
     return $this->wrapper->UnPack();
   }
   
+  function GetWrapper() {
+    return $this->wrapper;
+  }
+  
   /**
    * Create a new Instance.
    *
@@ -109,5 +113,9 @@ class NetProxy {
   function Enum($value) {
     $this->wrapper->Enum($value);
     return $this;
+  }
+  
+  function IsNull() {
+    return $this->wrapper->IsNull();
   }
 }

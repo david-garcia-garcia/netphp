@@ -45,4 +45,12 @@ class MagicWrapperUtilities extends ComProxy {
     $instance = MagicWrapper::Get()->Wrap($this->host->GetIteratorSample());
     return $instance;
   }
+  
+  /**
+   * Returns a MagicWrapped instance of Dictionary<string, string>
+   */
+  public function GetDictionaryIteratorSample() {
+    $instance = MagicWrapper::Get()->Wrap($this->host->GetDictionaryIteratorSample());
+    return $instance;
+  }
 }

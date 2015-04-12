@@ -29,7 +29,7 @@ class NetProxyCollection extends NetProxy implements \Iterator , \Countable {
   }
 
   public function count() {
-    return NetProxy::Get($this->wrapper->iterator_count());
+    return $this->wrapper->countable_count();
   }
 
   function rewind() {
@@ -53,4 +53,5 @@ class NetProxyCollection extends NetProxy implements \Iterator , \Countable {
   function valid() {
     return $this->wrapper->iterator_valid();
   }
+  
 }

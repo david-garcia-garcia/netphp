@@ -54,7 +54,8 @@ class MagicWrapper extends ComProxy {
    */
   public function CallMethod($method, $args) {
     // Wrap a new Magic Wrapper around the result.
-    $result = static::Get()->Wrap($this->host->CallMethod($method, $args));
+    $result = $this->host->CallMethod($method, $args);
+    $result = static::Get()->Wrap($result);
     self::ManageExceptions();
     return $result;
   }
@@ -140,6 +141,13 @@ class MagicWrapper extends ComProxy {
     return $result;
   }
   
+  /**
+   * Is the wrapped .Net instance null?
+   */
+  public function IsNull() {
+    $this->host->is_null();
+  }
+  
   //*****************************************************
   // Start iterator section.
   //*****************************************************
@@ -169,6 +177,17 @@ class MagicWrapper extends ComProxy {
   public function iterator_key() {
     $result = $this->host->iterator_key();
     self::ManageExceptions();
-    return static::Get()->Wrap($result);
+    // Do not wrap results are we are expecting native types.
+    // We could have Dictionary<object, object> on the .Net side
+    // so this needs a revisit, but usually you get simple types
+    // as dictionary keys..
+    return $result;
+  }
+  
+  public function countable_count() {
+    $result = $this->host->countable_count();
+    self::ManageExceptions();
+    // Do not wrap results as we are expecting native int.
+    return $result;
   }
 }
