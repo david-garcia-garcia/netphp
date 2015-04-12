@@ -1,16 +1,14 @@
 {
     "name": "drupalonwindows/netphp",
 	"version": "master",
-	"homepage": "http://www.drupalonwindows.com",
 	"type": "library",
 	"description": "",
 	"keywords": [".Net", "PHP", ".Net Framework", "Microsoft", "dotnet"],
 	"license": "MIT",
 	"authors": [
 	{
-		"name": "David García",
-		"email": "info@drupalonwindows.com",
-		"homepage": "http://www.drupalonwindows.com"
+		"name": "David Garcí­a",
+		"email": "info@sabentis.com",
 	}
 	],
     "require": {

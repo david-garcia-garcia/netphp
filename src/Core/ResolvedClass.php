@@ -8,7 +8,7 @@ namespace NetPhp\Core;
  * Use this as a container for that info.
  *
  * TODO:// Completely revise this and it's usage, it's quite
- * and improvised mess.
+ * an improvised mess.
  */
 class ResolvedClass {
   public $assemblyName;

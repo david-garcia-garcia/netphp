@@ -4,21 +4,31 @@ namespace NetPhp\Core;
 
 use NetPhp\Core\MagicWrapperUtilities;
 use NetPhp\Core\MagicWrapper;
+use NetPhp\Core\NetProxyUtils;
 
+/**
+ * Wraps around a MagicWrapper class instance
+ * to allow interaction with the MagicWrappers underlying
+ * COM instance methods, properties and others.
+ */
 class NetProxy {
-
-  private $forbidden_methods = array(
-    'CallMethod' => TRUE,
-    'PropertySet' => TRUE,
-    'PropertyGet' => TRUE,
-    'WrappedType' => TRUE,
-    'UnWrap' => TRUE,
-    'UnPack' => TRUE,
-    'Instantiate' => TRUE,
-    'Wrap' => TRUE
-  );
   
+  /**
+   * Do not allow external interaction with the
+   * MagicWrapper methods.
+   *
+   * @param string $method 
+   * @throws \Exception 
+   */
   private function checkForbiddenMethods($method) {
+    global $forbidden_methods;
+    if (!isset($forbidden_methods)) {
+      $forbidden_methods = array();
+      $rf = new \ReflectionClass(MagicWrapper::class);
+      foreach($rf->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+        $forbidden_methods[] = $method->name;
+      }
+    }
     if (isset($forbidden_methods[$method])) {
       throw new \Exception('Cannot call MagicWrapper methods on NetProxy');
     }
@@ -32,14 +42,14 @@ class NetProxy {
   }
 
   function __call($method, $args) {
-    NetManager::UnpackParameters($args);
+    NetProxyUtils::UnpackParameters($args);
     $this->checkForbiddenMethods($method);
     $result = $this->wrapper->CallMethod($method, $args);
     return new NetProxy($result);
   }
 
   function __set($name, $value){
-    NetManager::UnpackParameter($value);
+    NetProxyUtils::UnpackParameter($value);
     $this->wrapper->PropertySet($name, $value);
   }
 
@@ -76,7 +86,7 @@ class NetProxy {
    * @return NetProxy
    */
   function Instantiate(...$args) {
-    NetManager::UnpackParameters($args);
+    NetProxyUtils::UnpackParameters($args);
     $this->wrapper->Instantiate($args);
     return $this;
   }

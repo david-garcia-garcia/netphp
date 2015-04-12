@@ -9,13 +9,13 @@
     <ProjectTypeGuids>{A0786B88-2ADB-4C21-ABE8-AA2D79766269}</ProjectTypeGuids>
     <AssemblyName>NetPhp</AssemblyName>
     <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-    <Server>Custom</Server>
+    <Server>PHPDev</Server>
     <PublishEvent>None</PublishEvent>
     <PHPDevAutoPort>True</PHPDevAutoPort>
     <PHPDevPort>63529</PHPDevPort>
     <PHPDevHostName>localhost</PHPDevHostName>
     <IISProjectUrl>http://localhost:63529/</IISProjectUrl>
-    <CustomServerUrl>http://localhost</CustomServerUrl>
+    <CustomServerUrl>http://localhost/</CustomServerUrl>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <IncludeDebugInformation>true</IncludeDebugInformation>
@@ -32,6 +32,7 @@
     <Compile Include="src\Core\MagicWrapperUtilities.php" />
     <Compile Include="src\Core\NetManager.php" />
     <Compile Include="src\Core\NetProxy.php" />
+    <Compile Include="src\Core\NetProxyUtils.php" />
     <Compile Include="src\Core\NetUtilities.php" />
     <Compile Include="src\Core\ResolvedClass.php" />
     <Compile Include="src\Core\TypeMapping.php" />

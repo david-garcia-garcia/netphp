@@ -22,6 +22,7 @@ abstract class ComProxy {
     
   }
   
+  
   protected function __construct() {}
 
   // @var variant $hots
@@ -33,7 +34,12 @@ abstract class ComProxy {
    * provided assembly and class.
    */
   protected function _Instantiate($assembly, $class) {
-    $this->host = new \DOTNET($assembly, $class);
+    try {
+      $this->host = new \DOTNET($assembly, $class);
+    }
+    catch (\Exception $e) {
+      COMExceptionManager::Manage($e);
+    }
   }
   
   /**
