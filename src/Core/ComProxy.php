@@ -9,20 +9,6 @@ use NetPhp\Core\MagicWrapper;
  */
 abstract class ComProxy {
 
-  /**
-   * Manage internal .Net Exceptions
-   * and convert them to PHP Exceptions
-   */
-  protected function ManageExceptions() {
-    $str = $this->host->LastErrorDump();
-    $error = $this->host->PopLastError();
-    if ($error !== NULL) {
-      throw new \Exception($str);
-    }
-    
-  }
-  
-  
   protected function __construct() {}
 
   // @var variant $hots

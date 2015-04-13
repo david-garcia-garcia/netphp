@@ -40,16 +40,9 @@
     <Compile Include="src\Samples\AjaxMinSample.php" />
     <Compile Include="src\Samples\XFiniumSamples.php" />
     <Compile Include="src\Tests\PHPTypes.php" />
-    <Compile Include="vendor\autoload.php" />
-    <Compile Include="vendor\composer\autoload_classmap.php" />
-    <Compile Include="vendor\composer\autoload_namespaces.php" />
-    <Compile Include="vendor\composer\autoload_psr4.php" />
-    <Compile Include="vendor\composer\autoload_real.php" />
-    <Compile Include="vendor\composer\ClassLoader.php" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="composer.json" />
-    <Content Include="composer.lock" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -57,7 +50,5 @@
     <Folder Include="src\Core\" />
     <Folder Include="src\Samples\" />
     <Folder Include="src\Tests\" />
-    <Folder Include="vendor\" />
-    <Folder Include="vendor\composer\" />
   </ItemGroup>
 </Project>

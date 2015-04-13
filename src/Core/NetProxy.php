@@ -42,18 +42,21 @@ class NetProxy {
   }
   
   public static function Get($host) {
-    if (!is_a($host, MagicWrapper::class)) {
-      throw new \Exception('Net Proxy can only wrap over MagicWrapper');
-    }
-    
     $instance = new NetProxy($host);
     return $instance;
   }
 
   function __call($method, $args) {
-    NetProxyUtils::UnpackParameters($args);
     $this->checkForbiddenMethods($method);
     $result = $this->wrapper->CallMethod($method, $args);
+    return NetProxy::Get($result);
+  }
+  
+  function Call($method, ...$args) {
+    $result = $this->wrapper->CallMethod($method, $args);
+    if (isset($this->wrapper->type_metadata['method_with_native_return_types'][$method])) {
+      return $result;
+    }
     return NetProxy::Get($result);
   }
 

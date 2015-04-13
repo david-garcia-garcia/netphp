@@ -38,7 +38,7 @@ class NetManager {
   
   public function Create($assembly, $class) {
     $resolved = self::ResolveClass($assembly, $class);
-    $native = MagicWrapper::Get()->Type($resolved);
+    $native = MagicWrapper::GetFromType($resolved);
     return NetProxy::Get($native);
   }
 

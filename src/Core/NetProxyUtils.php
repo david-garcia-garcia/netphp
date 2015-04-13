@@ -21,9 +21,10 @@ class NetProxyUtils {
    * @param array $params 
    */
   public static function UnpackParameters(array &$params) {
-    for ($x = 0; $x < count($params); $x++) {
-      $item = &$params[$x];
-      static::UnpackParameter($item);
+    foreach ($params as &$param) {
+      if (method_exists($param, 'UnPack')) {
+        $param = $param->UnPack();
+      }
     }
   }
   
@@ -33,11 +34,8 @@ class NetProxyUtils {
    * @param mixed $param 
    */
   public static function UnpackParameter(&$param) {
-    if (is_a($param, NetProxy::class)) {
+    if (method_exists($param, 'UnPack')) {
       $param = $param->UnPack();
-    } 
-    elseif (is_a($param, MagicWrapper::class)) {
-      $param = $param->UnPack();
-    } 
+    }
   }
 }

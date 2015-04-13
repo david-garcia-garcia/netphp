@@ -21,7 +21,7 @@ class PHPTypes {
     $PHPType[] = array('data' => FALSE, 'netType' => 'System.Boolean');
     $PHPType[] = array('data' => NULL, 'netType' => 'System.DBNull');
     $PHPType[] = array('data' => array(), 'netType' => 'System.Object[]');
-    $PHPType[] = array('data' => function() { $abstract = 0; }, 'netType' => 'System.__ComObject');
+    //$PHPType[] = array('data' => function() { $abstract = 0; }, 'netType' => 'System.__ComObject');
     
     $mappings = array();
     
@@ -61,24 +61,49 @@ class PHPTypes {
       $real_value = $value->Val();
     }
     
+    
+    $start = microtime(TRUE);
+    $net1 = new NetManager();
+    
+    $list = new \DOTNET(\NetPhp\Core\Constants::ASSEMBLY, 'netutilities.CustomArrayList');
+    
+    
+    for ($x = 0; $x < 5000; $x++) {
+      $list->Add("Object {$x}");
+    }
+    
+    // Retrieve total count.
+    $count = count($list);
+    
+    $total3 = microtime(TRUE) - $start;
+    
     // Be brave and use .Net native lists on the fly.
     // ArrayList is the closes thing we have to a PHP array.
-    $net1 = new NetManager();
+    
     $net1->RegisterAssembly('mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089', 'mscorlib');
     $net1->RegisterClass('mscorlib', 'System.Collections.ArrayList', 'ArrayList');
+    
+    
+    try {
+      $utils->TestException();
+    }
+    catch (\Exception $e) {
+      $o = 0;
+    }
+    
     
     $list = $net1->Create('mscorlib', 'ArrayList')->Instantiate();
     
     // Wrap over a collection proxy
     $list = \NetPhp\Core\NetProxyCollection::Get($list->GetWrapper());
-        
+    
     // Check the .Net type.
     $net_type = $list->GetType();
     
     $start = microtime(TRUE);
 
     for ($x = 0; $x < 5000; $x++) {
-      $list->Add("Object {$x}");
+      $list->Call("Add", "Object {$x}");
     }
     
     // Retrieve total count.
@@ -88,16 +113,18 @@ class PHPTypes {
     
     $start = microtime(TRUE);
     
-    $list = array();
+    $list = new \Doctrine\Common\Collections\ArrayCollection();
     
     for ($x = 0; $x < 5000; $x++) {
-      $list[] = "Object {$x}";
+      $list->add("Object {$x}");
     }
     
     // Retrieve total count.
     $count = count($list);
     
     $total2 = microtime(TRUE) - $start;
+    
+
     
     $a  = 0;
     

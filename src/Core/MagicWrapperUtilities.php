@@ -42,7 +42,7 @@ class MagicWrapperUtilities extends ComProxy {
    * Returns a MagicWrapped instance of List<string>
    */
   public function GetIteratorSample() {
-    $instance = MagicWrapper::Get()->Wrap($this->host->GetIteratorSample());
+    $instance = MagicWrapper::Get($this->host->GetIteratorSample());
     return $instance;
   }
   
@@ -50,7 +50,14 @@ class MagicWrapperUtilities extends ComProxy {
    * Returns a MagicWrapped instance of Dictionary<string, string>
    */
   public function GetDictionaryIteratorSample() {
-    $instance = MagicWrapper::Get()->Wrap($this->host->GetDictionaryIteratorSample());
+    $instance = MagicWrapper::Get($this->host->GetIteratorSample());
     return $instance;
+  }
+  
+  /**
+   * Throw an Exception from .Net
+   */
+  public function TestException() {
+    $this->host->TestException();
   }
 }

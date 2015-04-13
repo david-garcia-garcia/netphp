@@ -12,7 +12,8 @@
 	}
 	],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "doctrine/collections": "1.2.*@dev"
     },
     "autoload": {
         "psr-4": { "NetPhp\\": "src/" }
