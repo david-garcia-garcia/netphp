@@ -34,7 +34,7 @@ class NetProxy {
     }
   }
 
-  // @var MagicWrapper $host
+  //@var MagicWrapper $host
   protected $wrapper;
 
   private function __construct($host) {
@@ -49,6 +49,9 @@ class NetProxy {
   function __call($method, $args) {
     $this->checkForbiddenMethods($method);
     $result = $this->wrapper->CallMethod($method, $args);
+    if (isset($this->wrapper->type_metadata['method_with_native_return_types'][$method])) {
+      return $result;
+    }
     return NetProxy::Get($result);
   }
   

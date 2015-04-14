@@ -6,7 +6,6 @@ namespace NetPhp\Core;
  * Wrapper for full PHP-.Net interoperability.
  */
 class MagicWrapper extends ComProxy {
-
   // @var ResolvedClass $type_data
   //   The .Net type as requested by the user.
   protected $type_data;
@@ -23,6 +22,7 @@ class MagicWrapper extends ComProxy {
   public static function GetFromType(ResolvedClass $source) {
     $result = new MagicWrapper();
     $result->type_data = $source;
+    $result->LoadMagicWrapper();
     return $result;
   }
   
@@ -93,7 +93,6 @@ class MagicWrapper extends ComProxy {
    */
   public function PropertySet($property, $value) {
     $this->host->PropertySet($property, $value);
-    self::ManageExceptions();
   }
   
   /**
@@ -103,7 +102,6 @@ class MagicWrapper extends ComProxy {
    */
   public function PropertyGet($property) {
     $result = $this->host->PropertyGet($property);
-    self::ManageExceptions();
     return static::Get($result);
   }
   
@@ -120,7 +118,6 @@ class MagicWrapper extends ComProxy {
    *  Arguments to pass for the type constructor.
    */
   public function Instantiate(...$args) {
-    $this->LoadMagicWrapperFromType();
     $this->LoadMetadata();
     $this->host->Instantiate();
   }
@@ -129,18 +126,17 @@ class MagicWrapper extends ComProxy {
     if (!empty($this->type_metadata)) {
       return;
     }
-    $this->LoadMagicWrapperFromType();
     $this->type_metadata = json_decode($this->host->GetMetadata(), true);
   }
   
-  private function LoadMagicWrapperFromType() {
+  private function LoadMagicWrapper() {
     // If there is a host we are already wrapped, nothing to do.
     if ($this->host != null) {
       return;
     }
     
     // Make sure we have inited the binary MagicWrapper.
-    $this->_Instantiate(Constants::ASSEMBLY, Constants::MW_CLASS);
+    $this->_InstantiateCOM(Constants::MW_CLASS);
     
     $assembly = $this->type_data->assemblyFullQualifiedName;
     if (file_exists($assembly)) {
@@ -164,7 +160,7 @@ class MagicWrapper extends ComProxy {
    *  The Enum value to wrap over.
    */
   public function Enum($value) {
-    $this->host->Enum($this->type_data->assemblyFullQualifiedName, $this->type_data->classFullQualifiedName, $value);
+    $this->host->Enum($value);
   }
   
   /**
