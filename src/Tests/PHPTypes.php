@@ -62,20 +62,7 @@ class PHPTypes {
     }
     
     
-    $start = microtime(TRUE);
     $net1 = new NetManager();
-    
-    $list = new \DOTNET(\NetPhp\Core\Constants::ASSEMBLY, 'netutilities.CustomArrayList');
-    
-    
-    for ($x = 0; $x < 5000; $x++) {
-      $list->Add("Object {$x}");
-    }
-    
-    // Retrieve total count.
-    $count = count($list);
-    
-    $total3 = microtime(TRUE) - $start;
     
     // Be brave and use .Net native lists on the fly.
     // ArrayList is the closes thing we have to a PHP array.

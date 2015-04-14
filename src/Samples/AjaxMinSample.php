@@ -51,7 +51,7 @@ EOD;
     // The UnWrap will give us the underlying Native type, if this can be convertable
     // to PHP (such as a string) we will get it converted, otherwise you get
     // an unusable COM object.
-    $result = $minifier->MinifyJavaScript($script, $settings)->Val();
+    $result = $minifier->MinifyJavaScript($script, $settings);
   }
   
   /**
@@ -84,6 +84,6 @@ EOD;
     // The UnWrap will give us the underlying Native type, if this can be convertable
     // to PHP (such as a string) we will get it converted, otherwise you get
     // an unusable COM object.
-    $result = $minifier->MinifyJavaScript($script, $settings)->Val();
+    $result = $minifier->MinifyJavaScript($script, $settings);
   }
 }
