@@ -39,10 +39,13 @@
     <Compile Include="src\Core\TypeMapping.php" />
     <Compile Include="src\Samples\AjaxMinSample.php" />
     <Compile Include="src\Samples\XFiniumSamples.php" />
-    <Compile Include="src\Tests\PHPTypes.php" />
+    <Compile Include="src\Tests\basic\BasicTest.php" />
+    <Compile Include="src\Tests\basic\PHPTypes.php" />
+    <Compile Include="src\Tests\boostrap.inc" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="composer.json" />
+    <Content Include="src\Tests\phpunit.xml" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -50,5 +53,6 @@
     <Folder Include="src\Core\" />
     <Folder Include="src\Samples\" />
     <Folder Include="src\Tests\" />
+    <Folder Include="src\Tests\basic\" />
   </ItemGroup>
 </Project>
