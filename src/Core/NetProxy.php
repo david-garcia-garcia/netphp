@@ -124,4 +124,17 @@ class NetProxy {
   function IsNull() {
     return $this->wrapper->IsNull();
   }
+  
+  /**
+   * Returns an instance of NetProxyCollection
+   * wrapper around the internal MagicWrapper.
+   *
+   * Make sure that the native .Net type is iterable
+   * before doing this!
+   *
+   * @return NetProxyCollection
+   */
+  function AsIterator() {
+    return NetProxyCollection::Get($this->wrapper);
+  }
 }
