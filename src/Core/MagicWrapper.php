@@ -175,7 +175,12 @@ class MagicWrapper extends ComProxy {
    * Get the internal hosted object!
    */
   public function UnWrap() {
-    return $this->host->UnWrap();
+    if (gettype($this->host) == 'variant') {
+      return $this->host->UnWrap();
+    }
+    else {
+      return $this->host;
+    }
   }
   
   /**
@@ -192,6 +197,7 @@ class MagicWrapper extends ComProxy {
   public function iterator_current() {
     $result = $this->host->iterator_current();
     return static::Get($result);
+    
   }
   
   public function iterator_valid() {
