@@ -25,8 +25,8 @@ class NetProxy {
     if (!isset($forbidden_methods)) {
       $forbidden_methods = array();
       $rf = new \ReflectionClass(MagicWrapper::class);
-      foreach($rf->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
-        $forbidden_methods[] = $method->name;
+      foreach($rf->getMethods(\ReflectionMethod::IS_PUBLIC) as $m) {
+        $forbidden_methods[] = $m->name;
       }
     }
     if (isset($forbidden_methods[$method])) {
