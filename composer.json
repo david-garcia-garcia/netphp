@@ -1,6 +1,6 @@
 {
     "name": "drupalonwindows/netphp",
-	"version": "1.0.1",
+	"version": "master",
 	"type": "library",
 	"description": "",
 	"keywords": [".Net", "PHP", ".Net Framework", "Microsoft", "dotnet"],
