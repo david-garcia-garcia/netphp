@@ -47,4 +47,9 @@ class NetUtilities {
     $result = static::$utils->GetTypeAsString($object);
     return $result;
   }
+  
+  public static function GetStringVersion() {
+    static::EnsureLoaded();
+    return static::$utils->GetStringVersion();
+  }
 }

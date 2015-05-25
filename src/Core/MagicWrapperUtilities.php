@@ -60,4 +60,18 @@ class MagicWrapperUtilities extends ComProxy {
   public function TestException() {
     $this->host->TestException();
   }
+  
+  /**
+   * Version number and license type.
+   */
+  public function GetStringVersion() {
+    return $this->host->GetStringVersion();
+  }
+  
+  /**
+   * Get the AssemblyName instance.
+   */
+  public function GetVersion() {
+    return $this->host->GetVersion();
+  }
 }
