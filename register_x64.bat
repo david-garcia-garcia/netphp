@@ -1,1 +1,1 @@
-"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\regasm.exe" netutilities.dll
+"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\regasm.exe" netutilities.dll /codebase
