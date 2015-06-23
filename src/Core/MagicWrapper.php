@@ -117,7 +117,7 @@ class MagicWrapper extends ComProxy {
    * @param mixed $args 
    *  Arguments to pass for the type constructor.
    */
-  public function Instantiate(...$args) {
+  public function Instantiate() {
     $this->LoadMetadata();
     $this->host->Instantiate();
   }
