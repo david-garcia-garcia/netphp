@@ -114,12 +114,12 @@ class MagicWrapper extends ComProxy {
    * @param mixed $name 
    *  Full qualified name of the .Net type inside the assembly.
    *
-   * @param mixed $args 
+   * @param array $args 
    *  Arguments to pass for the type constructor.
    */
-  public function Instantiate() {
+  public function Instantiate($args = array()) {
     $this->LoadMetadata();
-    $this->host->Instantiate();
+    $this->host->Instantiate($args);
   }
   
   private function LoadMetadata() {
