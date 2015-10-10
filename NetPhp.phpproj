@@ -47,11 +47,7 @@
     <Content Include="composer.json" />
     <Content Include="LICENSE" />
     <Content Include="README.md" />
-    <Content Include="register_x64.bat" />
-    <Content Include="register_x86.bat" />
     <Content Include="phpunit.xml" />
-    <Content Include="unregister_x64.bat" />
-    <Content Include="unregister_x86.bat" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

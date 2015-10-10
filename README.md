@@ -1,5 +1,9 @@
 # netphp
 
+UPDATE: The 2.x version of NetPHP does not need anymore to the NetPHP binaries as COM components. 
+
+Just drop the NetPhP binary in your PHP installation folder!
+
 Using .Net code from PHP needs not to be a nightmare any more! Built upon the com_dotnet extension
 this library allows you to easily integrate your .Net code into any PHP application.
 
