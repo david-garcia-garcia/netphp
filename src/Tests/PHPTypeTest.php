@@ -6,8 +6,11 @@ class PHPTypeTest extends \PHPUnit_Framework_TestCase {
   /**
    * TODO: Convert this piece of code into a PHP unit test.
    */
-  public static function Run() {
+  public static function testRun() {
     
+    // Use COM so that we can use newer versiones of the .Net framework.
+    \NetPhp\Core\Configuration::GetConfiguration()->setLoadMode("COM");
+
     // Net Should report it's native types becase 
     // COM+ does converion for these.
     $PHPType = array();

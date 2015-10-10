@@ -149,8 +149,13 @@ class MagicWrapper extends ComProxy {
     
     // Make sure we have inited the binary MagicWrapper.
     $configuration = Configuration::GetConfiguration();
-    $this->_InstantiateDOTNET($configuration->getAssemblyFullQualifiedName(), $configuration->GetMagicWrapperClassName());
-    
+    if ($configuration->getLoadMode() == "DOTNET") {
+      $this->_InstantiateDOTNET($configuration->getAssemblyFullQualifiedName(), $configuration->GetMagicWrapperClassName());
+    }
+    else if ($configuration->getLoadMode() == "COM") {
+      $this->_InstantiateCOM($configuration->GetMagicWrapperClassName());
+    }
+
     $assembly = $this->type_data->assemblyFullQualifiedName;
     if (file_exists($assembly)) {
       $this->host->TypeFromFile($assembly, $this->type_data->classFullQualifiedName);

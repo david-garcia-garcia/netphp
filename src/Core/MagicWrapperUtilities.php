@@ -8,8 +8,15 @@ class MagicWrapperUtilities extends ComProxy {
 
   public static function GetInstance() {
     $instance = new MagicWrapperUtilities();
+
     $configuration = Configuration::GetConfiguration();
-    $instance->_InstantiateDOTNET($configuration->getAssemblyFullQualifiedName(), $configuration->GetMagicWrapperUtilitiesClassName());
+    if ($configuration->getLoadMode() == "DOTNET") {
+      $instance->_InstantiateDOTNET($configuration->getAssemblyFullQualifiedName(), $configuration->GetMagicWrapperUtilitiesClassName());
+    }
+    else if ($configuration->getLoadMode() == "COM") {
+      $instance->_InstantiateCOM($configuration->GetMagicWrapperUtilitiesClassName());
+    }
+
     return $instance;
   }
   
