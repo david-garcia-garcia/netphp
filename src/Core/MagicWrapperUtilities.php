@@ -8,7 +8,8 @@ class MagicWrapperUtilities extends ComProxy {
 
   public static function GetInstance() {
     $instance = new MagicWrapperUtilities();
-    $instance->_InstantiateCOM(Constants::MWU_CLASS);
+    $configuration = Configuration::GetConfiguration();
+    $instance->_InstantiateDOTNET($configuration->getAssemblyFullQualifiedName(), $configuration->GetMagicWrapperUtilitiesClassName());
     return $instance;
   }
   
@@ -72,6 +73,15 @@ class MagicWrapperUtilities extends ComProxy {
    * Get the AssemblyName instance.
    */
   public function GetVersion() {
-    return $this->host->GetVersion();
+    $instance = MagicWrapper::Get($this->host->GetVersion());
+    return $instance;
+  }
+
+  /**
+   * The the list of installed .Net framwork versions.
+   */
+  public function GetAvailableFrameworkVersions() {
+    $instance = MagicWrapper::Get($this->host->getAvailableFrameworkVersions());
+    return NetProxyCollection::Get($instance);
   }
 }

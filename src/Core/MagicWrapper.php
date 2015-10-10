@@ -6,13 +6,20 @@ namespace NetPhp\Core;
  * Wrapper for full PHP-.Net interoperability.
  */
 class MagicWrapper extends ComProxy {
-  // @var ResolvedClass $type_data
-  //   The .Net type as requested by the user.
+
+  /**
+   * The .Net type as requested by the user.
+   * 
+   * @var ResolvedClass
+   */
   protected $type_data;
   
-  // @var array $type_metadata
-  //   The .Net type details.
-  public $type_metadata;
+  /**
+   * Type metadata array details.
+   * 
+   * @var mixed
+   */
+  protected $type_metadata;
   
   protected function __construct() { }
   
@@ -22,7 +29,6 @@ class MagicWrapper extends ComProxy {
   public static function GetFromType(ResolvedClass $source) {
     $result = new MagicWrapper();
     $result->type_data = $source;
-    $result->LoadMagicWrapper();
     return $result;
   }
   
@@ -118,15 +124,21 @@ class MagicWrapper extends ComProxy {
    *  Arguments to pass for the type constructor.
    */
   public function Instantiate($args = array()) {
-    $this->LoadMetadata();
+    $this->LoadMagicWrapper();
     $this->host->Instantiate($args);
   }
   
-  private function LoadMetadata() {
-    if (!empty($this->type_metadata)) {
-      return;
+  /**
+   * Get this type metadata.
+   * 
+   * Lazy loads of course...
+   */
+  public function GetMetadata() {
+    if (empty($this->type_metadata)) {
+      $metadata = $this->host->GetMetadata();
+      $this->type_metadata = json_decode($metadata, true);
     }
-    $this->type_metadata = json_decode($this->host->GetMetadata(), true);
+    return $this->type_metadata;
   }
   
   private function LoadMagicWrapper() {
@@ -136,7 +148,8 @@ class MagicWrapper extends ComProxy {
     }
     
     // Make sure we have inited the binary MagicWrapper.
-    $this->_InstantiateCOM(Constants::MW_CLASS);
+    $configuration = Configuration::GetConfiguration();
+    $this->_InstantiateDOTNET($configuration->getAssemblyFullQualifiedName(), $configuration->GetMagicWrapperClassName());
     
     $assembly = $this->type_data->assemblyFullQualifiedName;
     if (file_exists($assembly)) {
@@ -175,7 +188,7 @@ class MagicWrapper extends ComProxy {
    * Get the internal hosted object!
    */
   public function UnWrap() {
-    if (gettype($this->host) == 'variant') {
+    if (in_array(gettype($this->host), array('variant', 'object'))) {
       return $this->host->UnWrap();
     }
     else {

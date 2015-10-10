@@ -123,8 +123,18 @@ class NetProxy {
     return $this;
   }
   
+  /**
+   * Summary of IsNull
+   */
   function IsNull() {
     return $this->wrapper->IsNull();
+  }
+
+  /**
+   * Summary of LoadMetadata
+   */
+  function GetMetadata() {
+    return $this->wrapper->GetMetadata();
   }
   
   /**

@@ -1,10 +1,7 @@
 <?php
-namespace NetPhp\Tests;
 
-use NetPhp\Core\NetManager;
-use NetPhp\Core\MagicWrapper;
 
-class PHPTypes {
+class PHPTypeTest extends \PHPUnit_Framework_TestCase {
 
   /**
    * TODO: Convert this piece of code into a PHP unit test.

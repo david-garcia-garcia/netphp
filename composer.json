@@ -1,6 +1,6 @@
 {
     "name": "drupalonwindows/netphp",
-	"version": "1.x",
+	"version": "1.0",
 	"type": "library",
 	"description": "",
 	"keywords": [".Net", "PHP", ".Net Framework", "Microsoft", "dotnet"],
@@ -8,7 +8,7 @@
 	"authors": [
 	{
 		"name": "David",
-		"email": "info@sabentis.com"
+		"email": "deivid.garcia.garcia@gmail.com"
 	}
 	],
     "require": {

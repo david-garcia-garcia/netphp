@@ -27,7 +27,7 @@
     <Compile Include="index.php" />
     <Compile Include="src\Core\COMExceptionManager.php" />
     <Compile Include="src\Core\ComProxy.php" />
-    <Compile Include="src\Core\Constants.php" />
+    <Compile Include="src\Core\Configuration.php" />
     <Compile Include="src\Core\MagicWrapper.php" />
     <Compile Include="src\Core\MagicWrapperUtilities.php" />
     <Compile Include="src\Core\NetManager.php" />
@@ -37,15 +37,21 @@
     <Compile Include="src\Core\NetUtilities.php" />
     <Compile Include="src\Core\ResolvedClass.php" />
     <Compile Include="src\Core\TypeMapping.php" />
+    <Compile Include="src\Core\Utilities.php" />
     <Compile Include="src\Samples\AjaxMinSample.php" />
     <Compile Include="src\Samples\XFiniumSamples.php" />
-    <Compile Include="src\Tests\basic\BasicTest.php" />
-    <Compile Include="src\Tests\basic\PHPTypes.php" />
-    <Compile Include="src\Tests\boostrap.inc" />
+    <Compile Include="src\Tests\FrameworkTest.php" />
+    <Compile Include="src\Tests\PHPTypeTest.php" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="composer.json" />
-    <Content Include="src\Tests\phpunit.xml" />
+    <Content Include="LICENSE" />
+    <Content Include="README.md" />
+    <Content Include="register_x64.bat" />
+    <Content Include="register_x86.bat" />
+    <Content Include="phpunit.xml" />
+    <Content Include="unregister_x64.bat" />
+    <Content Include="unregister_x86.bat" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +59,5 @@
     <Folder Include="src\Core\" />
     <Folder Include="src\Samples\" />
     <Folder Include="src\Tests\" />
-    <Folder Include="src\Tests\basic\" />
   </ItemGroup>
 </Project>
