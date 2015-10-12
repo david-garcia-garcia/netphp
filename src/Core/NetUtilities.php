@@ -11,9 +11,12 @@ use NetPhp\Core\MagicWrapperUtilities;
  */
 class NetUtilities {
   
-  // @var MagicWrapperUtilities $utils;
-  //  The actual COM instance of the MagicWrapperUtilities
-  //  defined inside the NetPHP binary.
+  /**
+   * The actual COM instance of the MagicWrapperUtilities
+   *  defined inside the NetPHP binary.
+   *  
+   * @var mixed
+   */
   private static $utils = NULL;
   
   /**
@@ -48,6 +51,11 @@ class NetUtilities {
     return $result;
   }
   
+  /**
+   * Summary of GetStringVersion
+   * 
+   * @return mixed
+   */
   public static function GetStringVersion() {
     static::EnsureLoaded();
     return static::$utils->GetStringVersion();

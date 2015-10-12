@@ -55,13 +55,17 @@ class NetProxy {
     return NetProxy::Get($result);
   }
   
-  function Call($method) {
-    $args = Utilities::GetArgs(func_get_args(), __FUNCTION__, static::class);
+  function CallWithArrayArgs($method, $args) {
     $result = $this->wrapper->CallMethod($method, $args);
     if (isset($this->wrapper->type_metadata['method_with_native_return_types'][$method])) {
       return $result;
     }
     return NetProxy::Get($result);
+  }
+
+  function Call($method) {
+    $args = Utilities::GetArgs(func_get_args(), __FUNCTION__, static::class);
+    return $this->CallWithArrayArgs($method, $args);
   }
 
   function __set($name, $value){
@@ -106,7 +110,10 @@ class NetProxy {
    * @return NetProxy
    */
   function Instantiate() {
-    $args = func_get_args();
+    return $this->InstantiateArgsAsArray(func_get_args());
+  }
+
+  function InstantiateArgsAsArray(array $args) {
     NetProxyUtils::UnpackParameters($args);
     $this->wrapper->Instantiate($args);
     return $this;

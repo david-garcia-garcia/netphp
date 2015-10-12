@@ -29,6 +29,7 @@ class Utilities {
 
   /**
    * Summary of NumberOfParameters
+   * 
    * @param mixed $method 
    * @param mixed $class 
    * @return mixed

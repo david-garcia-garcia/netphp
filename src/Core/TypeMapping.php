@@ -8,8 +8,11 @@ namespace NetPhp\Core;
  */
 class TypeMapping {
 
-  // @var array $mappings
-  //   PHP types to .Net types.
+  /**
+   * PHP Types equivalentes in .Net
+   * 
+   * @var string[]
+   */
   private static $mappings = array(
     'string' => 'System.String',
     'integer' => 'System.Int32',
@@ -20,8 +23,11 @@ class TypeMapping {
     'object' => 'System.__ComObject',
   );
 
-  // @var array $mapping_flipped
-  //   .Net types to PHP types.
+  /**
+   * .Net types to PHP types.
+   * 
+   * @var string[]
+   */
   private static $mapping_flipped;
 
   /**
