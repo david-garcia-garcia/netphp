@@ -29,6 +29,8 @@ class MagicWrapper extends ComProxy {
   public static function GetFromType(ResolvedClass $source) {
     $result = new MagicWrapper();
     $result->type_data = $source;
+    $result->LoadMagicWrapper();
+    $result->GetMetadata();
     return $result;
   }
   
@@ -41,6 +43,7 @@ class MagicWrapper extends ComProxy {
     $result = new MagicWrapper();
     if($source != null) {
       $result->_Wrap($source);
+      $result->GetMetadata();
     }
     return $result;
   }
@@ -83,10 +86,7 @@ class MagicWrapper extends ComProxy {
     }
     // Wrap a new Magic Wrapper around the result.
     $result = $this->host->CallMethod($method, $args);
-    // If this is a native, return as-is.
-    if (isset($this->type_metadata['method_with_native_return_types'][$method])) {
-      return $result;
-    }
+
     // Otherwise wrap it.
     $result = static::Get($result);
     return $result;

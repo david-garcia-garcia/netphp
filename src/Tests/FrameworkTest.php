@@ -1,5 +1,6 @@
 <?php
 
+use NetPhp\ms\Typer;
 
 /**
  * Testea la navegación principal, login y main page.
@@ -13,6 +14,28 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase {
 
     // Use COM so that we can use newer versiones of the .Net framework.
     \NetPhp\Core\Configuration::GetConfiguration()->setLoadMode("COM");
+
+    // Register .Net framework assemblies.
+    \NetPhp\Core\NetProxy::RegisterTypes(\NetPhp\ms\registered_types_mscorlib::GetTypes());
+    \NetPhp\Core\NetProxy::RegisterTypes(\NetPhp\ms\registered_types_System_Data::GetTypes());
+    \NetPhp\Core\NetProxy::RegisterTypes(\NetPhp\ms\registered_types_System_Security::GetTypes());
+    \NetPhp\Core\NetProxy::RegisterTypes(\NetPhp\ms\registered_types_System_Transactions::GetTypes());
+    \NetPhp\Core\NetProxy::RegisterTypes(\NetPhp\ms\registered_types_System_Xml::GetTypes());
+
+    // Start consuming your .Net libraries!
+
+    // Because PHP has no method overriding, constructors are called vía static methods called GetInstance, GetInstance1, etc..
+    $fifo = \NetPhp\ms\System\IO\FileInfo::GetInstance(Typer::cString('d:\\log.log'));
+    // Although .Net could understand some of our native types, we opted to wrap them in proxies. Typer class gives us the tools to wrap
+    // these values.
+    $net_string = Typer::cString("This is a string ready to use for .Net");
+    $net_integer = Typer::cInt32(56);
+
+    $fifo = \NetPhp\ms\System\IO\FileInfo::GetInstance(Typer::cString("D:\log.log"));
+    if ($fifo->get_Exists()->Val() == TRUE) {
+      echo 'This file exists!';
+    }
+
 
     // Get a list of available .Net framework version in this machine.
     $utilities = \NetPhp\Core\MagicWrapperUtilities::GetInstance();
@@ -40,10 +63,20 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase {
 
     $manager = new \NetPhp\Core\NetManager();
 
+    //$array_list = \NetPhp\ms\System\Collections\ArrayList::GetInstance();
+    //$array_list->Add("Pruebas");
+
     // Test dealing with an ArrayList
-    $manager->RegisterAssembly('mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089', 'mscorlib');
-    $manager->RegisterClass('mscorlib', 'System.Collections.ArrayList', 'ArrayList');
-    $list = $manager->Create('mscorlib', 'ArrayList')->Instantiate();
+    //$manager->RegisterAssembly('mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089', 'mscorlib');
+    //$manager->RegisterClass('mscorlib', 'System.Collections.ArrayList', 'ArrayList');
+    //$list = $manager->Create('mscorlib', 'ArrayList')->Instantiate();
+    try {
+      $exists = \NetPhp\ms\System\IO\File::Exists(Typer::cString("D:\\log.log"));
+      $final_result = $exists->Val();
+    }
+    catch (\Exception $e) {
+
+    }
 
     // Wrap over a collection proxy
     $list = $list->AsIterator();  

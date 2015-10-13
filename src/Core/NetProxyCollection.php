@@ -14,11 +14,11 @@ use NetPhp\Core\NetProxyUtils;
  */
 class NetProxyCollection extends NetProxy implements \Iterator , \Countable {
 
-  private function __construct($host) {
+  protected function __construct($host) {
     $this->wrapper = $host;
   }
   
-  public static function Get($host) {
+  public static function Get(MagicWrapper $host) {
      // TODO: MagicWrapper should tell us if this is iterable in .Net
     if (!is_a($host, MagicWrapper::class)) {
       throw new \Exception('NetProxyCollection can only wrap over MagicWrapper that is iterable.');

@@ -42,11 +42,26 @@ class NetManager {
     return NetProxy::Get($native);
   }
 
-  public static function CreateStatic($assembly, $class) {
+  /**
+   * Summary of CreateStatic
+   * 
+   * @param mixed $assembly 
+   * @param mixed $class 
+   * @param mixed $data 
+   * 
+   * @return NetProxy
+   */
+  public static function CreateStatic($assembly, $class, $proxy_class = NULL, $data = NULL) {
     $resolved = new ResolvedClass();
     $resolved->assemblyFullQualifiedName = $assembly;
     $resolved->classFullQualifiedName = $class;
     $native = MagicWrapper::GetFromType($resolved);
+    if ($data !== NULL) {
+      $native->Wrap($data);
+    }
+    if (!empty($proxy_class)) {
+      return $proxy_class::Get($native);
+    }
     return NetProxy::Get($native);
   }
 
