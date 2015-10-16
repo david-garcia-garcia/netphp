@@ -12,7 +12,7 @@ use NetPhp\Core\NetProxyUtils;
  *  As for now the binary .dll only supports objects that have the
  *  IList or ICollection interface. Support for Dictionary<> is on the way.
  */
-class NetProxyCollection extends NetProxy implements \Iterator , \Countable {
+class NetProxyCollection extends NetProxy implements \Iterator , \Countable, \ArrayAccess {
 
   protected function __construct($host) {
     $this->wrapper = $host;
@@ -31,6 +31,8 @@ class NetProxyCollection extends NetProxy implements \Iterator , \Countable {
   public function count() {
     return $this->wrapper->countable_count();
   }
+
+  #region \Iterator methods
 
   function rewind() {
     $this->wrapper->iterator_rewind();
@@ -53,5 +55,28 @@ class NetProxyCollection extends NetProxy implements \Iterator , \Countable {
   function valid() {
     return $this->wrapper->iterator_valid();
   }
+
+  #endregion
+
+  
+  #region \ArrayAccess methods
+
+  function offsetExists($offset) {
+    $this->wrapper->offsetExists($offset);
+  }
+
+  function offsetGet($offset) {
+    return NetProxy::Get($this->wrapper->offsetGet($offset));
+  }
+
+  function offsetSet($offset, $value) {
+    $this->wrapper->offsetSet($offset, $value);
+  }
+
+  function offsetUnset($offset) {
+    $this->wrapper->offsetUnset($offset);
+  }
+
+  #endregion
   
 }

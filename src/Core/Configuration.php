@@ -35,6 +35,12 @@ class Configuration {
     return $this->magicWrapperUilitiesClassName;
   }
 
+  public static $types = array();
+
+  public static function RegisterTypes(array $types) {
+    static::$types[] = $types;
+  }
+
   
   #region LoadMode
 

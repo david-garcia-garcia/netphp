@@ -12,21 +12,30 @@ use NetPhp\Core\NetProxyUtils;
  * COM instance methods, properties and others.
  */
 class NetProxy {
-  
-  protected static $types = array();
 
-  public static function RegisterTypes(array $types) {
-    static::$types[] = $types;
+
+  protected static $assembly = "";
+  protected static $class = "";
+
+  private static function __endsWith($needle, $haystack) {
+    return preg_match('/' . preg_quote($needle, '/') . '$/', $haystack);
   }
 
   /**
    * Map a .Net type to a PHP Proxy
-   * 
-   * @param string $NetType 
+   *
+   * @param string $NetType
    * @return mixed
    */
   public static function GetProxyPHPType($NetType) {
-    foreach (static::$types as $type) {
+
+    // If this is an Array, there is no representation in PHP
+    // so use the Base Type.
+    if (static::__endsWith('[]', $NetType)) {
+      return \NetPhp\ms\System\Array_::class;
+    }
+
+    foreach (Configuration::$types as $type) {
       if (isset($type[$NetType])) {
         return $type[$NetType];
       }
@@ -40,8 +49,8 @@ class NetProxy {
    * Do not allow external interaction with the
    * MagicWrapper methods.
    *
-   * @param string $method 
-   * @throws \Exception 
+   * @param string $method
+   * @throws \Exception
    */
   private function checkForbiddenMethods($method) {
     global $forbidden_methods;
@@ -59,7 +68,7 @@ class NetProxy {
 
   /**
    * Internal MagicWrapper instance
-   * 
+   *
    * @var MagicWrapper
    */
   protected $wrapper;
@@ -67,12 +76,12 @@ class NetProxy {
   protected function __construct($host) {
     $this->wrapper = $host;
   }
-  
+
   /**
-   * 
-   * @param MagicWrapper $host 
-   * 
-   * @return object
+   *
+   * @param MagicWrapper $host
+   *
+   * @return mixed
    */
   public static function Get(MagicWrapper $host) {
     $class = static::class;
@@ -82,23 +91,25 @@ class NetProxy {
 
   /**
    * Proxy  method calls to the internal wrapper.
-   * 
-   * @param string $method 
-   * @param array $args 
+   *
+   * @param string $method
+   * @param array $args
    */
-  function __call($method, $args) {
+  public function __call($method, $args) {
     $this->checkForbiddenMethods($method);
     $this->CallWithArrayArgs($method, $args);
   }
-  
+
   /**
    * Call an internal method with arguments as an array.
-   * 
-   * @param string $method 
-   * @param mixed $args 
+   *
+   * @param string $method
+   *
+   * @param mixed $args
+   *
    * @return MagicWrapper|object
    */
-  function CallWithArrayArgs($method, $args) {
+  protected function CallWithArrayArgs($method, $args) {
     $result = $this->wrapper->CallMethod($method, $args);
     $metadata = $this->wrapper->GetMetadata();
 
@@ -110,99 +121,154 @@ class NetProxy {
 
   /**
    * Call an internal method with arguments as non implicit parameters.
-   * 
-   * @param string $method 
+   *
+   * @param string $method
    * @return MagicWrapper|object
    */
-  function Call($method) {
+  protected function Call($method) {
     $args = Utilities::GetArgs(func_get_args(), __FUNCTION__, static::class);
     return $this->CallWithArrayArgs($method, $args);
   }
 
-  function __set($name, $value){
+
+  /**
+   * Property setter
+   *
+   * @param string $name
+   *
+   * @param mixed $value
+   */
+  public function __set($name, $value){
     NetProxyUtils::UnpackParameter($value);
     $this->wrapper->PropertySet($name, $value);
   }
 
-  function __get($name){
+  /**
+   * Property getter.
+   *
+   * @param string $name
+   *
+   * @return mixed
+   */
+  public function __get($name){
     $result =  $this->wrapper->PropertyGet($name);
-    return NetProxy::Get($result);
+    $metadata = $this->wrapper->GetMetadata();
+
+    /** @var NetProxy */
+    $class = static::GetProxyPHPType($metadata['properties'][$name]['PropertyType']);
+
+    return $class::Get($result);
   }
-  
+
   /**
    * Returns the .Net type of the wrapped object.
    */
-  function GetType() {
+  public function GetType() {
     return $this->wrapper->WrappedType();
   }
-  
+
   /**
    * Return the Internal wrapped value.
    */
-  function Val() {
+  public function Val() {
     return $this->wrapper->UnWrap();
   }
-  
+
   /**
    * Gets the native COM MagicWrapper object.
    */
-  function UnPack() {
+  public function UnPack() {
     return $this->wrapper->UnPack();
   }
-  
+
+  /**
+   * Get the internal instance, this is always a MagicWrapper
+   *
+   * @return MagicWrapper
+   */
   function GetWrapper() {
     return $this->wrapper;
   }
-  
+
   /**
-   * Create a new Instance.
+   * Create a new Instance with variadic like arguments.
    *
-   * @param mixed $args 
+   * @param mixed $args
+   *
    * @return NetProxy
    */
-  function Instantiate() {
-    return $this->InstantiateArgsAsArray(func_get_args());
+  function Instantiate(...$args) {
+    return $this->InstantiateArgsAsArray($args);
   }
 
   /**
    * Summary of InstantiateArgsAsArray
-   * 
-   * @param array $args 
-   * 
-   * @return mixed
+   *
+   * @param array $args
+   *
+   * @return mixed|NetProxy|NetProxyCollection
    */
   function InstantiateArgsAsArray(array $args) {
     NetProxyUtils::UnpackParameters($args);
     $this->wrapper->Instantiate($args);
     return $this;
   }
-  
+
+  /**
+   * Only use this to create an instance from a native type.
+   *
+   * @param mixed $data
+   *
+   * @return NetProxy
+   */
+  public static function FromNative($data = NULL) {
+    return NetManager::CreateStatic(static::$assembly, static::$class, static::class, $data);
+  }
+
   /**
    * Create a new Enum value instance.
    *
    * @param mixed $value
-   * 
+   *
    * @return NetProxy
    */
   function Enum($value) {
     $this->wrapper->Enum($value);
     return $this;
   }
-  
+
   /**
    * Summary of IsNull
    */
-  function IsNull() {
+  public function IsNull() {
     return $this->wrapper->IsNull();
   }
 
   /**
    * Summary of LoadMetadata
    */
-  function GetMetadata() {
+  public function GetMetadata() {
     return $this->wrapper->GetMetadata();
   }
-  
+
+  /**
+   * Get a Json representation of this object.
+   * 
+   * @return string
+   */
+  public function GetJson() {
+    return $this->wrapper->GetJson();
+  }
+
+  /**
+   * Get a PHP represenation of this object from JSON
+   * 
+   * @return mixed
+   */
+  public function GetPhpFromJson($assoc = FALSE) {
+    return $this->wrapper->GetPhpFromJson($assoc);
+  }
+
   /**
    * Returns an instance of NetProxyCollection
    * wrapper around the internal MagicWrapper.
@@ -212,14 +278,7 @@ class NetProxy {
    *
    * @return NetProxyCollection
    */
-  function AsIterator() {
+  public function AsIterator() {
     return NetProxyCollection::Get($this->wrapper);
   }
-
-  public static function CreateInstance($data = NULL) {
-    return NetManager::CreateStatic(static::$assembly_full_name, static::$class_name, static::class, $data);
-  }
-
-  protected static $assembly_full_name = "";
-  protected static $class_name = "";
 }

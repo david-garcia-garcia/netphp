@@ -6,6 +6,12 @@ use NetPhp\Core\MagicWrapper;
 
 class MagicWrapperUtilities extends ComProxy {
 
+
+  /**
+   * Get an instance of MagicWrapperUtilities
+   * 
+   * @return MagicWrapperUtilities
+   */
   public static function GetInstance() {
     $instance = new MagicWrapperUtilities();
 
@@ -47,22 +53,6 @@ class MagicWrapperUtilities extends ComProxy {
   }
   
   /**
-   * Returns a MagicWrapped instance of List<string>
-   */
-  public function GetIteratorSample() {
-    $instance = MagicWrapper::Get($this->host->GetIteratorSample());
-    return $instance;
-  }
-  
-  /**
-   * Returns a MagicWrapped instance of Dictionary<string, string>
-   */
-  public function GetDictionaryIteratorSample() {
-    $instance = MagicWrapper::Get($this->host->GetIteratorSample());
-    return $instance;
-  }
-  
-  /**
    * Throw an Exception from .Net
    */
   public function TestException() {
@@ -70,18 +60,36 @@ class MagicWrapperUtilities extends ComProxy {
   }
   
   /**
-   * Version number and license type.
+   * Summary of GetStringVersion
+   * 
+   * @return string
    */
   public function GetStringVersion() {
     return $this->host->GetStringVersion();
   }
   
   /**
+   * Summary of GetSampleTypes
+   */
+  public function GetSampleTypes() {
+    $instance = MagicWrapper::Get($this->host->GetSampleTypes());
+    return NetProxyCollection::Get($instance);
+  }
+
+  /**
+   * Summary of GetSampleTypes
+   */
+  public function GetSamples() {
+    $instance = MagicWrapper::Get($this->host->GetSamples());
+    return NetProxyCollection::Get($instance);
+  }
+
+  /**
    * Get the AssemblyName instance.
    */
   public function GetVersion() {
     $instance = MagicWrapper::Get($this->host->GetVersion());
-    return $instance;
+    return NetProxyCollection::Get($instance);
   }
 
   /**

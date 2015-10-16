@@ -15,8 +15,10 @@ class Utilities {
   /**
    * Emulates ...args
    * 
-   * @param mixed $method
-   * @param mixed $class
+   * @param string $method
+   * 
+   * @param string $class
+   * 
    * @param mixed[] $num 
    */
   public static function GetArgs($args, $method, $class = NULL) {
