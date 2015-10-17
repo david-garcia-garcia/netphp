@@ -26,7 +26,8 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase {
 
     $vertical = TRUE;
 
-    $doc = \NetPhp\ms\WebSupergoo\ABCpdf8\Doc::Doc__construct();
+    $doc = \NetPhp\ms\WebSupergoo\ABCpdf8\Doc::Doc_Constructor();
+ 
     $doc->HtmlOptions()->Engine(\NetPhp\ms\WebSupergoo\ABCpdf8\EngineType::Gecko());
     $doc->HtmlOptions()->Media(\NetPhp\ms\WebSupergoo\ABCpdf8\MediaType::Screen());
     $doc->HtmlOptions()->GeckoSubset()->UseScript(Typer::cBoolean(TRUE));
@@ -55,10 +56,10 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase {
     // Añadimos el HTML
     $theID = 0;
     try {
-      $theId = $doc->AddImageUrl_1($url, Typer::cBoolean(FALSE), $h, Typer::cBoolean(TRUE));
+      $theID = $doc->addImageUrl($url, Typer::cBoolean(FALSE), \NetPhp\ms\System\Convert::_ToInt32($h), Typer::cBoolean(TRUE));
       while (TRUE) {
-        $doc->FrameRect_1();
-        if (!$doc->Chainable($theID)) {
+        $doc->FrameRect();
+        if (!$doc->Chainable($theID)->Val()) {
           break;
         }
 
@@ -67,10 +68,11 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase {
       }
     }
     catch (\Exception $ex) {
-
+      // Bad news.
+      $this->assertEquals(TRUE, FALSE);
     }
 
-    // adjust the default rotation and save
+    // Adjust the default rotation and save
     if (!$vertical) {
       $theID = $doc->GetInfoInt($doc->Root(), Typer::cString("Pages"));
       $doc->SetInfo_1($theID, Typer::cString("/Rotate"), Typer::cString("90"));
@@ -81,9 +83,16 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase {
     // There is no way to deal with a byte[] in PHP
     // so use System.Convert to deal with that
     // using base64 as a bridge.
-    $b64 = \NetPhp\ms\System\Convert::__ToBase64String($bytes)->Val();
+    $b64 = \NetPhp\ms\System\Convert::_ToBase64String($bytes)->Val();
     $pdf = base64_decode($b64);
 
+    $path = Typer::cString("d:\\caca.pdf");
+
+    // 
+    \NetPhp\ms\System\IO\File::_WriteAllBytes($path, $bytes);
+
+    // Open windows explorer to that directory.
+    \NetPhp\ms\System\Diagnostics\Process::_Start(Typer::cString("explorer.exe"), \NetPhp\ms\System\String_::_Format(Typer::cString("/select,\"{0}\""), $path));
   }
 
   /**
@@ -197,7 +206,7 @@ EOT;
     \NetPhp\Core\Configuration::RegisterTypes(\NetPhp\ms\registered_types_ABCpdf::GetTypes());
 
     // See what are the 4 php native types being convert to on the .Net side
-    $arrayList = \NetPhp\ms\System\Collections\ArrayList::ArrayList__construct();
+    $arrayList = \NetPhp\ms\System\Collections\ArrayList::ArrayList_Constructor();
 
     $arrayList->Add(Typer::cBoolean(TRUE));
     $arrayList->Add(Typer::cInt32(52));
@@ -208,6 +217,27 @@ EOT;
     $this->assertTrue($arrayList[0]->Val());
     $this->assertEquals($arrayList[1]->Val(), 52);
     $this->assertEquals($arrayList[2]->Val(), 45454);
+  }
+
+  public function testDumper() {
+
+    // Set loading type.
+    \NetPhp\Core\Configuration::GetConfiguration()->setLoadMode("COM");
+
+    // Tell the runtime What assemblies we are going to be using.
+    $manager = \NetPhp\Core\NetManager::GetInstance();
+
+    // Make sure that we bring in at least the main assembly for the .Net framework. This assembly
+    // contains many native types.
+    $manager->RegisterAssembly("mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", "mscorlib");
+
+    // Now let's bring in an external assembly, such as AjaxMin.
+    $manager->RegisterAssembly("D:\Repositories\netutilities\Tests\resources\XFinium.PDF.dll", "XFinium");
+
+    // We could actually use these assemblies on the fly, but it is easier and more robust if we generate a
+    // static class model.
+    //\NetPhp\ms\System\Collections\IDictionary_trait
+
   }
 
 }

@@ -3,13 +3,19 @@
 namespace NetPhp\Core;
 
 /**
- * Define the configuration (behaviour) of this
- * the NetPhp component.
+ * Define the behaviour for the .Net compatibility
+ * layer.
  */
 class Configuration {
 
   private static $configuration = NULL;
   
+
+  /**
+   * Get the current configuration object.
+   * 
+   * @return Configuration
+   */
   public static function GetConfiguration() {
     if (static::$configuration == NULL) {
       static::$configuration = new Configuration();
@@ -68,7 +74,7 @@ class Configuration {
   public function setLoadMode($mode) {
 
     if (!in_array($mode, array('DOTNET', 'COM'))) {
-      throw new \Exception("Invalid load mode.");
+      throw new \Exception("Invalid load mode. Use COM or DOTNET.");
     }
 
     $this->_loadMode = $mode;

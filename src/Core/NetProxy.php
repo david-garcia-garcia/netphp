@@ -219,7 +219,7 @@ class NetProxy {
    *
    * @param mixed $data
    *
-   * @return NetProxy
+   * @return mixed|NetProxy|NetProxyCollection
    */
   public static function FromNative($data = NULL) {
     return NetManager::CreateStatic(static::$assembly, static::$class, static::class, $data);
@@ -230,7 +230,7 @@ class NetProxy {
    *
    * @param mixed $value
    *
-   * @return NetProxy
+   * @return mixed|NetProxy|NetProxyCollection
    */
   function Enum($value) {
     $this->wrapper->Enum($value);
