@@ -6,24 +6,11 @@ use NetPhp\Core\MagicWrapper;
 
 class TypeDumper extends ComProxy {
 
-
   /**
-   * Get an instance of TypeDumper
-   *
-   * @return TypeDumper
+   * {@inheritdoc} 
    */
-  public static function GetInstance() {
-    $instance = new TypeDumper();
-
-    $configuration = Configuration::GetConfiguration();
-    if ($configuration->getLoadMode() == "DOTNET") {
-      $instance->_InstantiateDOTNET($configuration->getAssemblyFullQualifiedName(), $configuration->GetTypeDumperClassName());
-    }
-    else if ($configuration->getLoadMode() == "COM") {
-      $instance->_InstantiateCOM($configuration->GetTypeDumperClassName());
-    }
-
-    return $instance;
+  public function __construct($loadMode = 'COM', $className = 'netutilities.TypeGenerator.TypeDumper', $assemblyName = NULL) {
+    parent::__construct($loadMode, $className, $assemblyName);
   }
 
   /**
@@ -119,5 +106,14 @@ class TypeDumper extends ComProxy {
    */
   public function GenerateModel() {
     $this->host->GenerateModel();
+  }
+
+  /**
+   * Just a security measure to prevent the type dumper
+   * from clearing a wrong folder and the generate
+   * a model over an existing one.
+   */
+  public function AllowDestinationDirectoryClear() {
+    $this->host->AllowDestinationDirectoryClear();
   }
 }

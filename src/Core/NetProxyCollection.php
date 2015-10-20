@@ -14,23 +14,27 @@ use NetPhp\Core\NetProxyUtils;
  */
 class NetProxyCollection extends NetProxy implements \Iterator , \Countable, \ArrayAccess {
 
-  protected function __construct($host) {
-    $this->wrapper = $host;
+  protected function __construct($host, $typeMap = NULL) {
+    parent::__construct($host, $typeMap);
   }
   
-  public static function Get(MagicWrapper $host) {
+  public static function Get(MagicWrapper $host, $typeMap = NULL) {
      // TODO: MagicWrapper should tell us if this is iterable in .Net
     if (!is_a($host, MagicWrapper::class)) {
       throw new \Exception('NetProxyCollection can only wrap over MagicWrapper that is iterable.');
     }
     
-    $instance = new NetProxyCollection($host);
+    $instance = new NetProxyCollection($host, $typeMap);
     return $instance;
   }
+
+  #region \Countable methods
 
   public function count() {
     return $this->wrapper->countable_count();
   }
+
+  #endregion
 
   #region \Iterator methods
 

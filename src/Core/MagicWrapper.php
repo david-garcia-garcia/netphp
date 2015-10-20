@@ -21,18 +21,7 @@ class MagicWrapper extends ComProxy {
    */
   protected $type_metadata;
 
-  protected function __construct() { }
-
-  /**
-   * Get a en empty magic wrapper to instantiate a class.
-   */
-  public static function GetFromType(ResolvedClass $source) {
-    $result = new MagicWrapper();
-    $result->type_data = $source;
-    $result->LoadMagicWrapper();
-    $result->GetMetadata();
-    return $result;
-  }
+  public function __construct() { }
 
   /**
    * Gets a magic wrapper instance. You can wrap over a
@@ -175,7 +164,6 @@ class MagicWrapper extends ComProxy {
    *  Arguments to pass for the type constructor.
    */
   public function Instantiate($args = array()) {
-    $this->LoadMagicWrapper();
     $this->host->Instantiate($args);
   }
 
@@ -190,27 +178,6 @@ class MagicWrapper extends ComProxy {
       $this->type_metadata = json_decode($metadata, true);
     }
     return $this->type_metadata;
-  }
-
-
-  /**
-   * Initialize the internal MagicWrapper instance.
-   * 
-   * @return void
-   */
-  private function LoadMagicWrapper() {
-    // If there is a host we are already wrapped, nothing to do.
-    if ($this->host != null) {
-      return;
-    }
-
-    $assembly = $this->type_data->assemblyFullQualifiedName;
-    if (file_exists($assembly)) {
-      $this->host = MagicWrapperUtilities::GetInstance()->TypeFromFile($assembly, $this->type_data->classFullQualifiedName);
-    }
-    else {
-      $this->host = MagicWrapperUtilities::GetInstance()->TypeFromName($assembly, $this->type_data->classFullQualifiedName);
-    }
   }
 
   /**

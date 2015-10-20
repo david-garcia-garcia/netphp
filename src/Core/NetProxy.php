@@ -5,6 +5,7 @@ namespace NetPhp\Core;
 use NetPhp\Core\MagicWrapperUtilities;
 use NetPhp\Core\MagicWrapper;
 use NetPhp\Core\NetProxyUtils;
+use NetPhp\Core\TypeMapBase;
 
 /**
  * Wraps around a MagicWrapper class instance
@@ -13,9 +14,16 @@ use NetPhp\Core\NetProxyUtils;
  */
 class NetProxy {
 
-
   protected static $assembly = "";
   protected static $class = "";
+
+  /**
+   * @var TypeMapBase
+   */
+  protected $runtimeTypeMap;
+
+  protected static $typeMap = NULL;
+
 
   private static function __endsWith($needle, $haystack) {
     return preg_match('/' . preg_quote($needle, '/') . '$/', $haystack);
@@ -25,9 +33,10 @@ class NetProxy {
    * Map a .Net type to a PHP Proxy
    *
    * @param string $NetType
+   *
    * @return mixed
    */
-  public static function GetProxyPHPType($NetType) {
+  protected function GetProxyPHPType($NetType) {
 
     // If this is an Array, there is no representation in PHP
     // so use the Base Type.
@@ -35,10 +44,9 @@ class NetProxy {
       $NetType = "System.Array";
     }
 
-    foreach (Configuration::$types as $type) {
-      if (isset($type['types'][$NetType])) {
-        return $type['types'][$NetType];
-      }
+    if (!empty($this->runtimeTypeMap)) {
+      $tm = $this->runtimeTypeMap;
+      return $tm::ResolveNetType($NetType);
     }
 
     // By default the proxy is NetProxy.
@@ -73,7 +81,8 @@ class NetProxy {
    */
   protected $wrapper;
 
-  protected function __construct($host) {
+  protected function __construct($host, $typeMap = null) {
+    $this->runtimeTypeMap = $typeMap == null ? static::$typeMap : $typeMap;
     $this->wrapper = $host;
   }
 
@@ -83,9 +92,9 @@ class NetProxy {
    *
    * @return mixed
    */
-  public static function Get(MagicWrapper $host) {
+  public static function Get(MagicWrapper $host, $typeMap = null) {
     $class = static::class;
-    $instance = new $class($host);
+    $instance = new $class($host, $typeMap);
     return $instance;
   }
 
@@ -97,7 +106,7 @@ class NetProxy {
    */
   public function __call($method, $args) {
     $this->checkForbiddenMethods($method);
-    $this->CallWithArrayArgs($method, $args);
+    return $this->CallWithArrayArgs($method, $args);
   }
 
   /**
@@ -113,13 +122,14 @@ class NetProxy {
     $result = $this->wrapper->CallMethod($method, $args);
     $metadata = $this->wrapper->GetMetadata();
 
+    /** @var NetProxy */
+    $class = NetProxy::class;
+
     if (isset($metadata['methods'][$method]['ReturnType'])) {
-      /** @var NetProxy */
-      $class = static::GetProxyPHPType($metadata['methods'][$method]['ReturnType']);
+      $class = $this->GetProxyPHPType($metadata['methods'][$method]['ReturnType']);
     }
-    else {
-      /** @var NetProxy */
-      $class = static::GetProxyPHPType($metadata['properties'][$method]['PropertyType']);
+    else if (isset($metadata['properties'][$method]['PropertyType'])) {
+      $class = $this->GetProxyPHPType($metadata['properties'][$method]['PropertyType']);
     }
 
     return $class::Get($result);
@@ -145,7 +155,7 @@ class NetProxy {
    * @param mixed $value
    */
   public function __set($name, $value){
-    NetProxyUtils::UnpackParameter($value);
+    $this->UnpackParameter($value);
     $this->wrapper->PropertySet($name, $value);
   }
 
@@ -161,7 +171,7 @@ class NetProxy {
     $metadata = $this->wrapper->GetMetadata();
 
     /** @var NetProxy */
-    $class = static::GetProxyPHPType($metadata['properties'][$name]['PropertyType']);
+    $class = $this->GetProxyPHPType($metadata['properties'][$name]['PropertyType']);
 
     return $class::Get($result);
   }
@@ -212,12 +222,45 @@ class NetProxy {
    *
    * @param array $args
    *
-   * @return mixed|NetProxy|NetProxyCollection
+   * @return mixed
    */
   function InstantiateArgsAsArray(array $args) {
-    NetProxyUtils::UnpackParameters($args);
+    $this->UnpackParameters($args);
     $this->wrapper->Instantiate($args);
+    /** @var mixed */
+    $result = $this;
+    return $result;
+  }
+
+
+  /**
+   * Create a new Enum value instance.
+   *
+   * @param mixed $value
+   *
+   * @return mixed
+   */
+  function Enum($value) {
+    $this->wrapper->Enum($value);
     return $this;
+  }
+
+  /**
+   * Summary of EnumStatic
+   *
+   * @param mixed $value
+   *
+   * @throws \Exception
+   *
+   * @return mixed
+   */
+  public static function EnumStatic($value) {
+    if (empty(static::$typeMap)) {
+      throw new \Exception("Canot use EnumStatic without a TypeMap.");
+    }
+    /** @var TypeMapBase */
+    $tm = static::$typeMap;
+    return $tm::TypeFromAssembly(static::$class, static::$assembly, static::class)->Enum($value);
   }
 
   /**
@@ -228,23 +271,12 @@ class NetProxy {
    * @return mixed|NetProxy|NetProxyCollection
    */
   public static function FromNative($data = NULL) {
-    return NetManager::CreateStatic(static::$assembly, static::$class, static::class, $data);
-  }
-
-  /**
-   * Create a new Enum value instance.
-   *
-   * @param mixed $value
-   *
-   * @return mixed|NetProxy|NetProxyCollection
-   */
-  function Enum($value) {
-    $this->wrapper->Enum($value);
-    return $this;
-  }
-
-  public static function EnumStatic($value) {
-    return NetManager::CreateStatic(static::$assembly, static::$class, static::class)->Enum($value);
+    if (empty(static::$typeMap)) {
+      throw new \Exception("Canot use FromNative without a TypeMap.");
+    }
+    /** @var TypeMapBase */
+    $tm = static::$typeMap;
+    return $tm::TypeFromAssembly(static::$class, static::$assembly, static::class, $data);
   }
 
   /**
@@ -290,5 +322,34 @@ class NetProxy {
    */
   public function AsIterator() {
     return NetProxyCollection::Get($this->wrapper);
+  }
+
+  /**
+   * Iterates a an array of objects and unpacks them as much
+   * as possible.
+   * 
+   * From either NetProxy or MagicWrapper wrappers
+   * to the COM instance, so that they can be sent
+   * to .Net.
+   *
+   * @param array $params 
+   */
+  public static function UnpackParameters(array &$params) {
+    foreach ($params as &$param) {
+      if (method_exists($param, 'UnPack')) {
+        $param = $param->UnPack();
+      }
+    }
+  }
+  
+  /**
+   * Unpacks a NetProxy or MagicWrapper to the COM instance.
+   *
+   * @param mixed $param 
+   */
+  public static function UnpackParameter(&$param) {
+    if (method_exists($param, 'UnPack')) {
+      $param = $param->UnPack();
+    }
   }
 }

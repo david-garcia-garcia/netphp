@@ -6,15 +6,76 @@ use NetPhp\Core\MagicWrapper;
 
 /**
  * There are some limitations the framework version.
+ * 
  * @see https://bugs.php.net/bug.php?id=55847
  * @see https://bugs.php.net/bug.php?id=29800
  */
 abstract class ComProxy {
 
-  protected function __construct() {}
+  protected $className = 'netutilities.MagicWrapperUtilities';
+  protected $assemblyName = '';
+  protected $loadMode;
 
-  // @var variant $hots
-  //   The native COM object
+
+  /**
+   * Returns an instance of the NetPhpRuntime
+   *
+   * @param string $loadMode
+   *   Can be DOTNET or COM.
+   *
+   * @param string $className
+   *   NetPhp binary type Full Qualified Name.
+   *
+   * @param string $assemblyName
+   *   NetPhp binary type assembly Full Qualified Name.
+   *
+   * @throws \Exception
+   */
+  public function __construct($loadMode = 'COM', $className = 'netutilities.NetPhpRuntime', $assemblyName = NULL) {
+    if (!in_array($loadMode, array('DOTNET', 'COM'))) {
+      throw new \Exception("Invalid load mode. Use COM or DOTNET.");
+    }
+
+    $this->_loadMode = $loadMode;
+    $this->class_name = $className;
+    $this->assembly_name = $assemblyName;
+  }
+
+  /**
+   * Returns the load mode used to instantiate the
+   * NetPhp binaries.
+   *
+   * @return mixed
+   */
+  public function getLoadMode() {
+    return $this->_loadMode;
+  }
+
+  /**
+   * Get an instance.
+   *
+   * @return null
+   */
+  public function Initialize() {
+
+    // Do NOT allow users to reinitialize an instance.
+    if ($this->host != null) {
+      throw new \Exception("This instance has already been initialized.");
+    }
+
+    if ($this->getLoadMode() == "DOTNET") {
+      $this->_InstantiateDOTNET($this->assembly_name, $this->class_name);
+    }
+    else if ($this->getLoadMode() == "COM") {
+      $this->_InstantiateCOM($this->class_name);
+    }
+  }
+
+  /**
+   * The VARIANT .Net object
+   * 
+   * @var mixed
+   */
   protected $host;
   
   /**
@@ -35,7 +96,7 @@ abstract class ComProxy {
       $this->host = new \DOTNET($assembly, $class);
     }
     catch (\Exception $e) {
-      COMExceptionManager::Manage($e);
+      $this->ManageComCreateError($e);
     }
   }
   
@@ -67,7 +128,7 @@ abstract class ComProxy {
       $this->host = new \COM($name);
     }
     catch (\Exception $e) {
-      COMExceptionManager::Manage($e);
+      $this->ManageComCreateError($e);
     }
   }
   
@@ -76,5 +137,22 @@ abstract class ComProxy {
    */
   protected function _Wrap($source) {
     $this->host = $source;
+  }
+
+  /**
+   * Wrap over the exception if we have some additional
+   * information otherwise rethrow.
+   *
+   * @param \Exception $e 
+   * 
+   * @throws \Exception 
+   */
+  protected function ManageComCreateError(\Exception $e) {
+    if (strpos($e->getMessage(), '[0x80004002]') !== FALSE) {
+      throw new \Exception('Could not instantiate .Net class, make sure it is decorated with the COMVisible(true) attribute and that it is marked as public.', $e->getCode(), $e);
+    }
+    else {
+      throw $e;
+    }
   }
 }

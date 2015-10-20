@@ -14,12 +14,12 @@ class Utilities {
 
   /**
    * Emulates ...args
-   * 
+   *
    * @param string $method
-   * 
+   *
    * @param string $class
-   * 
-   * @param mixed[] $num 
+   *
+   * @param mixed[] $num
    */
   public static function GetArgs($args, $method, $class = NULL) {
     if ($args === FALSE) {
@@ -31,9 +31,11 @@ class Utilities {
 
   /**
    * Summary of NumberOfParameters
+   *
+   * @param string $method
    * 
-   * @param mixed $method 
-   * @param mixed $class 
+   * @param string $class
+   * 
    * @return mixed
    */
   public static function NumberOfParameters($method, $class) {
@@ -52,5 +54,19 @@ class Utilities {
     }
     return $cache[$key];
   }
-  
+
+  /**
+   * Get the directory where the file that defines
+   * a class is found.
+   *
+   * @param mixed|string $class
+   *   Either the name of the class or an instance of it.
+   *
+   * @return string
+   */
+  public static function GetClassLocation($class) {
+    $reflector = new \ReflectionClass($class);
+    return dirname($reflector->getFileName());
+  }
+
 }
