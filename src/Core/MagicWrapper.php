@@ -192,30 +192,26 @@ class MagicWrapper extends ComProxy {
     return $this->type_metadata;
   }
 
+
+  /**
+   * Initialize the internal MagicWrapper instance.
+   * 
+   * @return void
+   */
   private function LoadMagicWrapper() {
     // If there is a host we are already wrapped, nothing to do.
     if ($this->host != null) {
       return;
     }
 
-    // Make sure we have inited the binary MagicWrapper.
-    $configuration = Configuration::GetConfiguration();
-    if ($configuration->getLoadMode() == "DOTNET") {
-      $this->_InstantiateDOTNET($configuration->getAssemblyFullQualifiedName(), $configuration->GetMagicWrapperClassName());
-    }
-    else if ($configuration->getLoadMode() == "COM") {
-      $this->_InstantiateCOM($configuration->GetMagicWrapperClassName());
-    }
-
     $assembly = $this->type_data->assemblyFullQualifiedName;
     if (file_exists($assembly)) {
-      $this->host->TypeFromFile($assembly, $this->type_data->classFullQualifiedName);
+      $this->host = MagicWrapperUtilities::GetInstance()->TypeFromFile($assembly, $this->type_data->classFullQualifiedName);
     }
     else {
-      $this->host->TypeFromName($assembly, $this->type_data->classFullQualifiedName);
+      $this->host = MagicWrapperUtilities::GetInstance()->TypeFromName($assembly, $this->type_data->classFullQualifiedName);
     }
   }
-
 
   /**
    * Wraps over an Enum value
@@ -233,8 +229,6 @@ class MagicWrapper extends ComProxy {
     $this->host->Enum($value);
   }
 
-
-
   /**
    * Is the wrapped .Net instance null?
    */
@@ -242,7 +236,7 @@ class MagicWrapper extends ComProxy {
     $this->host->is_null();
   }
 
-  #region Iterator related stuff
+  #region Iterator
 
   public function iterator_current() {
     $result = $this->host->iterator_current();
@@ -269,11 +263,19 @@ class MagicWrapper extends ComProxy {
     return static::Get($result);
   }
 
+  #endregion
+
+  #region Countable
+
   public function countable_count() {
     $result = $this->host->countable_count();
     // Do not wrap results as we are expecting native int.
     return $result;
   }
+
+  #endregion
+
+  #region ArrayAccess
 
   public function offsetGet($offset) {
     $result = $this->host->offsetGet($offset);

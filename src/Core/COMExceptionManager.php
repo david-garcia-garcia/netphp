@@ -8,6 +8,7 @@ namespace NetPhp\Core;
  * and give some real and useful information.
  */
 class COMExceptionManager {
+
   /**
    * Wrap over the exception if we have some additional
    * information otherwise rethrow.

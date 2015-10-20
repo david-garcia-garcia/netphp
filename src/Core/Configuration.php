@@ -9,11 +9,11 @@ namespace NetPhp\Core;
 class Configuration {
 
   private static $configuration = NULL;
-  
+
 
   /**
    * Get the current configuration object.
-   * 
+   *
    * @return Configuration
    */
   public static function GetConfiguration() {
@@ -21,7 +21,7 @@ class Configuration {
       static::$configuration = new Configuration();
     }
     return static::$configuration;
-  } 
+  }
 
   /**
    * Full qualified class name for the MagicWrapper class.
@@ -33,6 +33,11 @@ class Configuration {
    */
   private $magicWrapperUilitiesClassName = 'netutilities.MagicWrapperUtilities';
 
+  /**
+   * Full qualified name for the TypeDumper class.
+   */
+  private $typeDumperClassName = 'netutilities.TypeGenerator.TypeDumper';
+
   public function GetMagicWrapperClassName() {
     return $this->magicWrapperClassName;
   }
@@ -41,13 +46,22 @@ class Configuration {
     return $this->magicWrapperUilitiesClassName;
   }
 
-  public static $types = array();
-
-  public static function RegisterTypes(array $types) {
-    static::$types[] = $types;
+  public function GetTypeDumperClassName() {
+    return $this->typeDumperClassName;
   }
 
-  
+  public static $types = array();
+
+  /**
+   * Register runtime type mappings for .Net to PHP classes.
+   *
+   * @param array $types
+   */
+  public static function RegisterTypes(array $types) {
+    static::$types = array_merge(static::$types, $types);
+  }
+
+
   #region LoadMode
 
   protected $_loadMode = "DOTNET";
@@ -55,7 +69,7 @@ class Configuration {
   /**
    * Returns the load mode used to instantiate the
    * NetPhp binaries.
-   * 
+   *
    * @return mixed
    */
   public function getLoadMode() {
@@ -64,12 +78,12 @@ class Configuration {
 
   /**
    * Set the binary load mode.
-   * 
+   *
    *   DOTNET: Use the..
    *   COM: ...
-   *   
-   * @param string $mode 
-   * 
+   *
+   * @param string $mode
+   *
    */
   public function setLoadMode($mode) {
 
@@ -89,7 +103,7 @@ class Configuration {
   /**
    * Returns the assembly quelified name for the NetPhp
    * binaries. This is used when instantiating using DOTNET.
-   * 
+   *
    * @return mixed
    */
   public function getAssemblyFullQualifiedName() {
@@ -99,7 +113,7 @@ class Configuration {
   /**
    * Set the assembly quelified name. Only used for DOTNET load mode.
 
-   * @param string $mode 
+   * @param string $mode
    */
   public function setAssemblyFullQualifiedName($name) {
     $this->_assemblyFullQualifiedName = $name;

@@ -32,12 +32,12 @@ class NetProxy {
     // If this is an Array, there is no representation in PHP
     // so use the Base Type.
     if (static::__endsWith('[]', $NetType)) {
-      return \NetPhp\ms\System\Array_::class;
+      $NetType = "System.Array";
     }
 
     foreach (Configuration::$types as $type) {
-      if (isset($type[$NetType])) {
-        return $type[$NetType];
+      if (isset($type['types'][$NetType])) {
+        return $type['types'][$NetType];
       }
     }
 
@@ -113,8 +113,14 @@ class NetProxy {
     $result = $this->wrapper->CallMethod($method, $args);
     $metadata = $this->wrapper->GetMetadata();
 
-    /** @var NetProxy */
-    $class = static::GetProxyPHPType($metadata['methods'][$method]['ReturnType']);
+    if (isset($metadata['methods'][$method]['ReturnType'])) {
+      /** @var NetProxy */
+      $class = static::GetProxyPHPType($metadata['methods'][$method]['ReturnType']);
+    }
+    else {
+      /** @var NetProxy */
+      $class = static::GetProxyPHPType($metadata['properties'][$method]['PropertyType']);
+    }
 
     return $class::Get($result);
   }
@@ -237,6 +243,10 @@ class NetProxy {
     return $this;
   }
 
+  public static function EnumStatic($value) {
+    return NetManager::CreateStatic(static::$assembly, static::$class, static::class)->Enum($value);
+  }
+
   /**
    * Summary of IsNull
    */
@@ -253,7 +263,7 @@ class NetProxy {
 
   /**
    * Get a Json representation of this object.
-   * 
+   *
    * @return string
    */
   public function GetJson() {
@@ -262,7 +272,7 @@ class NetProxy {
 
   /**
    * Get a PHP represenation of this object from JSON
-   * 
+   *
    * @return mixed
    */
   public function GetPhpFromJson($assoc = FALSE) {
