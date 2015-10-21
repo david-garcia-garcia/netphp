@@ -225,9 +225,11 @@ class NetProxy {
    * @return mixed
    */
   function InstantiateArgsAsArray(array $args) {
+
     $this->UnpackParameters($args);
     $this->wrapper->Instantiate($args);
-    /** @var mixed */
+
+    /** @var mixed $result */
     $result = $this;
     return $result;
   }

@@ -151,8 +151,11 @@ abstract class ComProxy {
     if (strpos($e->getMessage(), '[0x80004002]') !== FALSE) {
       throw new \Exception('Could not instantiate .Net class, make sure it is decorated with the COMVisible(true) attribute and that it is marked as public.', $e->getCode(), $e);
     }
+    else if (stripos($e->getMessage(), 'Invalid syntax') !== FALSE) {
+      throw new \Exception('Could not instantiate COM class. Invalid syntax might meen that the COM component is simply not registered.', $e->getCode(), $e);
+    }
     else {
-      throw $e;
+      throw new \Exception('Could not instantiate COM/DOTNET object. Try changing the Load User Profile property of your Application Pool settings.', $e->getCode(), $e);
     }
   }
 }

@@ -28,9 +28,13 @@ class NetPhpRuntime extends ComProxy {
   }
 
   /**
-   * Summary of GetTypeAsString
+   * Pass in any object and get it's .Net type. If you
+   * pass in a MagicWrapper, it will get the type of the
+   * internal object. You can use this to check out what
+   * types do PHP natives get converted into by COM interop.
    *
    * @param mixed $object
+   * 
    * @return string
    */
   public function GetTypeAsString($object) {
@@ -77,7 +81,7 @@ class NetPhpRuntime extends ComProxy {
   }
 
   /**
-   * Get the AssemblyName instance.
+   * Returns a wrapped Assembly.GetExecutingAssembly()
    */
   public function GetExecutingAssembly() {
     $instance = MagicWrapper::Get($this->host->GetExecutingAssembly());
@@ -85,7 +89,8 @@ class NetPhpRuntime extends ComProxy {
   }
 
   /**
-   * Get a Version object of the current
+   * Get the Environment.Version object.
+   * 
    * @return NetProxy
    */
   public function GetRuntimeVersion() {
@@ -97,8 +102,7 @@ class NetPhpRuntime extends ComProxy {
    * The the list of installed .Net framwork versions.
    */
   public function GetAvailableFrameworkVersions() {
-    $instance = MagicWrapper::Get($this->host->getAvailableFrameworkVersions());
-    return NetProxyCollection::Get($instance);
+    return MagicWrapper::Get($this->host->getAvailableFrameworkVersions())->GetPhpFromJson();
   }
 
   /**
@@ -267,6 +271,7 @@ class NetPhpRuntime extends ComProxy {
     $this->RegisterAssemblyFromFullQualifiedName("System.EnterpriseServices, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.EnterpriseServices");
     $this->RegisterAssemblyFromFullQualifiedName("System.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Deployment");
     $this->RegisterAssemblyFromFullQualifiedName("System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Web");
+    $this->RegisterAssemblyFromFullQualifiedName("System.Configuration, Version = 2.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", "System.Configuration");
   }
 
   /**
@@ -284,8 +289,9 @@ class NetPhpRuntime extends ComProxy {
     $this->RegisterAssemblyFromFullQualifiedName("System.Management, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Management");
     $this->RegisterAssemblyFromFullQualifiedName("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Drawing");
     $this->RegisterAssemblyFromFullQualifiedName("System.EnterpriseServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.EnterpriseServices");
-    $this->RegisterAssemblyFromFullQualifiedName("System.Deployment, Version4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Deployment");
+    $this->RegisterAssemblyFromFullQualifiedName("System.Deployment, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Deployment");
     $this->RegisterAssemblyFromFullQualifiedName("System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Web");
+    $this->RegisterAssemblyFromFullQualifiedName("System.Configuration, Version = 4.0.0.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a", "System.Configuration");
   }
 
   #endregion
@@ -309,5 +315,14 @@ class NetPhpRuntime extends ComProxy {
         throw new \Exception("Unexpected...");
       }
     }
+  }
+
+  /**
+   * Get a report of the .Net registered assemblies and it's dependencies.
+   * 
+   * Use this to detect dependencies between libraries that cannot be resolved.
+   */
+  public function GetAssemblyReport() {
+    return MagicWrapper::Get($this->host->GetAssemblyReport())->GetPhpFromJson();
   }
 }
