@@ -248,6 +248,18 @@ class NetProxy {
   }
 
   /**
+   * Retrieve a static NOT instantiated instance, used for
+   * calling static members.
+   * 
+   * @return mixed
+   */
+  public static function __sti__() {
+    /** @var TypeMapBase */
+    $tm = static::$typeMap;
+    return $tm::TypeFromAssembly(static::$class, static::$assembly, static::class);
+  }
+
+  /**
    * Summary of EnumStatic
    *
    * @param mixed $value
@@ -260,9 +272,7 @@ class NetProxy {
     if (empty(static::$typeMap)) {
       throw new \Exception("Canot use EnumStatic without a TypeMap.");
     }
-    /** @var TypeMapBase */
-    $tm = static::$typeMap;
-    return $tm::TypeFromAssembly(static::$class, static::$assembly, static::class)->Enum($value);
+    return static::__static_instance()->Enum($value);
   }
 
   /**
