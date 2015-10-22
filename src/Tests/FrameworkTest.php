@@ -3,7 +3,7 @@
 namespace NetPhp\Tests;
 
 use NetPhp\ms\Typer;
-use NetPhp\ms\System\String_;
+use NetPhp\ms\System\netString;
 use NetPhp\Core\Utilities;
 
 /**
@@ -33,6 +33,37 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase {
     $runtime->RegisterAssemblyFromFile($this->GetABCPdfLocation(), "ABCpdf");
 
     return $runtime;
+  }
+
+  /**
+   * Test tha licensing functionality works.
+   */
+  public function testLicense() {
+
+    $good_key = '$2a$04$dIqXjB1YpQRo5XSjiOWY2ubaW1kyvxR4GaRTDvT3eGpBWAvAHKOd2';
+    $bad_key = 'asdgasdgasdgdsdg';
+
+    $runtime = $this->GetTestRuntime();
+    $key = $runtime->ActivationCurrentKey();
+    if ($key == $good_key) {
+      $this->AssertTrue($runtime->ActivationValid());
+    }
+  
+    $runtime->ActivationSetKey($bad_key);
+    $this->AssertFalse($runtime->ActivationValid());
+
+    $runtime->ActivationSetKey($good_key);
+    $this->AssertTrue($runtime->ActivationValid());
+
+    $runtime->ActivationClearCaches();
+    $this->AssertTrue($runtime->ActivationValid());
+
+    $runtime->ActivationSetKey($bad_key);
+    $this->AssertFalse($runtime->ActivationValid());
+
+    $runtime->ActivationSetKey($good_key);
+    $this->AssertTrue($runtime->ActivationValid());
+
   }
 
   /**
@@ -140,10 +171,10 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase {
 
     $vertical = TRUE;
 
-    $doc = \NetPhp\ms\WebSupergoo\ABCpdf8\Doc::Doc_Constructor();
+    $doc = \NetPhp\ms\WebSupergoo\ABCpdf8\netDoc::Doc_Constructor();
 
-    $doc->HtmlOptions()->Engine(\NetPhp\ms\WebSupergoo\ABCpdf8\EngineType::Gecko());
-    $doc->HtmlOptions()->Media(\NetPhp\ms\WebSupergoo\ABCpdf8\MediaType::Screen());
+    $doc->HtmlOptions()->Engine(\NetPhp\ms\WebSupergoo\ABCpdf8\netEngineType::Gecko());
+    $doc->HtmlOptions()->Media(\NetPhp\ms\WebSupergoo\ABCpdf8\netMediaType::Screen());
     $doc->HtmlOptions()->GeckoSubset()->UseScript(Typer::cBoolean(TRUE));
 
     $w = $doc->MediaBox()->Width();
@@ -170,7 +201,7 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase {
     // Añadimos el HTML
     $theID = 0;
     try {
-      $theID = $doc->addImageUrl($url, Typer::cBoolean(FALSE), \NetPhp\ms\System\Convert::_ToInt32($h), Typer::cBoolean(TRUE));
+      $theID = $doc->addImageUrl($url, Typer::cBoolean(FALSE), \NetPhp\ms\System\netConvert::_ToInt32($h), Typer::cBoolean(TRUE));
       while (TRUE) {
         $doc->FrameRect();
         if (!$doc->Chainable($theID)->Val()) {
@@ -197,16 +228,16 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase {
     // There is no way to deal with a byte[] in PHP
     // so use System.Convert to deal with that
     // using base64 as a bridge.
-    $b64 = \NetPhp\ms\System\Convert::_ToBase64String($bytes)->Val();
+    $b64 = \NetPhp\ms\System\netConvert::_ToBase64String($bytes)->Val();
     $pdf = base64_decode($b64);
 
     $path = Typer::cString("d:\\caca.pdf");
 
     //
-    \NetPhp\ms\System\IO\File::_WriteAllBytes($path, $bytes);
+    \NetPhp\ms\System\IO\netFile::_WriteAllBytes($path, $bytes);
 
     // Open windows explorer to that directory.
-    \NetPhp\ms\System\Diagnostics\Process::_Start(Typer::cString("explorer.exe"), String_::_Format(Typer::cString("/select,\"{0}\""), $path));
+    \NetPhp\ms\System\Diagnostics\netProcess::_Start(Typer::cString("explorer.exe"), netString::_Format(Typer::cString("/select,\"{0}\""), $path));
   }
 
   /**
@@ -308,13 +339,13 @@ EOT;
 
     // Register .Net framework assemblies.
     $runtime = $this->GetTestRuntime();
-
+       
     // Very important tell our PHP class map
     // to use the runtime we have constructed!
     \NetPhp\ms\TypeMap::SetRuntime($runtime);
 
     // See what are the 4 php native types being convert to on the .Net side
-    $arrayList = \NetPhp\ms\System\Collections\ArrayList::ArrayList_Constructor();
+    $arrayList = \NetPhp\ms\System\Collections\netArrayList::ArrayList_Constructor();
 
     $arrayList->Add(Typer::cBoolean(TRUE));
     $arrayList->Add(Typer::cInt32(52));

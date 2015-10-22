@@ -324,5 +324,49 @@ class NetPhpRuntime extends ComProxy {
    */
   public function GetAssemblyReport() {
     return MagicWrapper::Get($this->host->GetAssemblyReport())->GetPhpFromJson();
+  }  
+
+
+  #region License Related Methods
+
+  /**
+   * Get the current activation key.
+   */
+  public function ActivationCurrentKey() {
+    return $this->host->ActivationCurrentKey();
   }
+
+  /**
+   * Get this machine code used for activation.
+   */
+  public function ActivationGetCode() {
+    return $this->host->ActivationGetCode();
+  }
+
+  /**
+   * Set the activation key.
+   * 
+   * @param string $key 
+   */
+  public function ActivationSetKey($key) {
+    $this->host->ActivationSetKey($key);
+  }
+
+  /**
+   * Trigger the activation process to check
+   * if current key is valid.
+   */
+  public function ActivationValid() {
+    return $this->host->ActivationValid();
+  }
+
+  /**
+   * Clear out internal caches to make sure
+   * that persistent key storage is working.
+   */
+  public function ActivationClearCaches() {
+    $this->host->ActivationClearCaches();
+  }
+
+  #endregion
 }

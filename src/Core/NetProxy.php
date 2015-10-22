@@ -272,7 +272,7 @@ class NetProxy {
     if (empty(static::$typeMap)) {
       throw new \Exception("Canot use EnumStatic without a TypeMap.");
     }
-    return static::__static_instance()->Enum($value);
+    return static::__sti__()->Enum($value);
   }
 
   /**
