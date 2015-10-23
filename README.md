@@ -1,4 +1,4 @@
-# netphp
+# NetPhp
 
 Using .Net code from PHP needs not to be a nightmare any more! Built upon the com_dotnet extension
 this library allows you to easily integrate your .Net code into any PHP application.
