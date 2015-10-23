@@ -4,15 +4,10 @@ namespace NetPhp\Core;
 
 /**
  * Wrapper for full PHP-.Net interoperability.
+ * 
+ * COM CLASS ID FOR THE 2.X VERSION OF THE BINARY: {B5A161C8-C2FD-45E8-AD93-8EEA98607F5F}
  */
 class MagicWrapper extends ComProxy {
-
-  /**
-   * The .Net type as requested by the user.
-   *
-   * @var ResolvedClass
-   */
-  protected $type_data;
 
   /**
    * Type metadata array details.

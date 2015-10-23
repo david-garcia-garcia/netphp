@@ -29,7 +29,6 @@
     <Compile Include="src\Core\MagicWrapper.php" />
     <Compile Include="src\Core\TypeDumper.php" />
     <Compile Include="src\Core\NetPhpRuntime.php" />
-    <Compile Include="src\Core\NetManager.php" />
     <Compile Include="src\Core\NetProxyCollection.php" />
     <Compile Include="src\Core\NetProxy.php" />
     <Compile Include="src\Core\TypeMapBase.php" />

@@ -6,6 +6,8 @@ use NetPhp\Core\MagicWrapper;
 
 /**
  * Runtime for NetPhp.
+ * 
+ * COM CLASS ID FOR THE 2.X VERSION OF THE BINARY: {2BF990C8-2680-474D-BDB4-65EEAEE0015F}
  */
 class NetPhpRuntime extends ComProxy {
 

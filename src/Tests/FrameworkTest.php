@@ -23,7 +23,7 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase {
   protected function GetTestRuntime() {
 
     // Generate a runtime.
-    $runtime = new \NetPhp\Core\NetPhpRuntime();
+    $runtime = new \NetPhp\Core\NetPhpRuntime('COM', '{2BF990C8-2680-474D-BDB4-65EEAEE0015F}');
 
     // Initialize the runtime.
     $runtime->Initialize();

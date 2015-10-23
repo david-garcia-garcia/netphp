@@ -4,6 +4,13 @@ namespace NetPhp\Core;
 
 use NetPhp\Core\MagicWrapper;
 
+
+/**
+ * Used to dump the PHP static class model
+ * of .Net types.
+ * 
+ *  * COM CLASS ID FOR THE 2.X VERSION OF THE BINARY: {2D1896A6-6528-438C-9890-55778147D5BD}
+ */
 class TypeDumper extends ComProxy {
 
   /**
