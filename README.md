@@ -17,6 +17,12 @@ this library allows you to easily integrate your .Net code into any PHP applicat
 
 ![Sample](/example0.gif?raw=true "Sample")
 
+Download the examples project from GitHub
+
+[NetPhp Sample](https://github.com/david-garcia-garcia/netphp-sample)
+
+[Check out the NetPhp User Guide] (http://www.drupalonwindows.com/en/blog/netphp-user-guide)
+
 This code in C#:
 
 ```c#
