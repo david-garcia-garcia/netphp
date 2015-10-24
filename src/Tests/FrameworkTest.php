@@ -49,6 +49,16 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase {
       $this->AssertTrue($runtime->ActivationValid());
     }
   
+    $key = 'THIS IS THE ACTIVATION KEY';
+    $runtime = new \NetPhp\Core\NetPhpRuntime();
+    $runtime->Initialize();
+    $runtime->ActivationSetKey($key);
+    echo $runtime->ActivationValid();
+
+    $runtime = new \NetPhp\Core\NetPhpRuntime();
+    $runtime->Initialize();
+    echo $runtime->ActivationGetCode();
+
     $runtime->ActivationSetKey($bad_key);
     $this->AssertFalse($runtime->ActivationValid());
 

@@ -96,6 +96,9 @@ abstract class ComProxy {
       $this->host = new \DOTNET($assembly, $class);
     }
     catch (\Exception $e) {
+      if (!class_exists('DOTNET')) {
+        throw new \Exception("DOTNET class not found. Verify that you have the COM_DOTNET php extension properly enabled.");
+      }
       $this->ManageComCreateError($e);
     }
   }
@@ -128,6 +131,9 @@ abstract class ComProxy {
       $this->host = new \COM($name);
     }
     catch (\Exception $e) {
+      if (!class_exists('COM')) {
+        throw new \Exception("COM class not found. Verify that you have the COM_DOTNET php extension properly enabled.");
+      }
       $this->ManageComCreateError($e);
     }
   }
