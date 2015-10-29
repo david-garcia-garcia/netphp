@@ -36,30 +36,46 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase {
   }
 
   /**
-   * Test tha licensing functionality works.
+   * Test licensing.
    */
   public function testLicense() {
 
-    $good_key = '$2a$04$dIqXjB1YpQRo5XSjiOWY2ubaW1kyvxR4GaRTDvT3eGpBWAvAHKOd2';
-    $bad_key = 'asdgasdgasdgdsdg';
+    // Of course this key is only valid in the machine where it was generated.
+    $good_key = 'ewAiAEMASABFAEMASwBTAFUATQAiADoAIgAkADIAYQAkADAANAAkAGQASQBxAFgAagBCADEAWQBwAFEAUgBvADUAWABTAGoAaQBPAFcAWQAyAHUASwBjADUARgByAHgAYwBoAHQAMQBrAGoAMABUAHkASwB2AEcAYgBkAEIAagBGAFEARwBDAHMAbwBKAGIAeQAiACwAIgBHAFUASQBEACIAOgB7ACIAYwBwAHUASQBkACIAOgAiAEIARgBFAEIARgBCAEYARgAwADAAMAAzADAANgBDADMAIgAsACIAVwBpAG4AMwAyAF8AQgBJAE8AUwBfAE0AYQBuAHUAZgBhAGMAdAB1AHIAZQByACIAOgAiAEwARQBOAE8AVgBPACIALAAiAFcAaQBuADMAMgBfAEIASQBPAFMAXwBTAE0AQgBJAE8AUwBCAEkATwBTAFYAZQByAHMAaQBvAG4AIgA6ACIASgA5AEUAVAA5ADkAVwBXACAAKAAyAC4AMQA5ACAAKQAiACwAIgBXAGkAbgAzADIAXwBCAEkATwBTAF8ASQBkAGUAbgB0AGkAZgBpAGMAYQB0AGkAbwBuAEMAbwBkAGUAIgA6ACIAIgAsACIAVwBpAG4AMwAyAF8AQgBJAE8AUwBfAFMAZQByAGkAYQBsAE4AdQBtAGIAZQByACIAOgAiAFAARgAwADQAUwBKAFMARQAiACwAIgBXAGkAbgAzADIAXwBCAEkATwBTAF8AUgBlAGwAZQBhAHMAZQBEAGEAdABlACIAOgAiADIAMAAxADUAMAA1ADAANQAwADAAMAAwADAAMAAuADAAMAAwADAAMAAwACsAMAAwADAAIgAsACIAVwBpAG4AMwAyAF8AQgBJAE8AUwBfAFYAZQByAHMAaQBvAG4AIgA6ACIATABFAE4ATwBWAE8AIAAtACAAMgAxADkAMAAiACwAIgBXAGkAbgAzADIAXwBEAGkAcwBrAEQAcgBpAHYAZQBfAE0AbwBkAGUAbAAiADoAIgBUAFMAMgA1ADYARwBNAFQAUwA0ADAAMAAiACwAIgBXAGkAbgAzADIAXwBEAGkAcwBrAEQAcgBpAHYAZQBfAE0AYQBuAHUAZgBhAGMAdAB1AHIAZQByACIAOgAiACgAUwB0AGEAbgBkAGEAcgBkACAAZABpAHMAawAgAGQAcgBpAHYAZQBzACkAIgAsACIAVwBpAG4AMwAyAF8ARABpAHMAawBEAHIAaQB2AGUAXwBTAGkAZwBuAGEAdAB1AHIAZQAiADoAIgAxADAAOQA2ADAANQA2ADIANQAwACIALAAiAFcAaQBuADMAMgBfAEQAaQBzAGsARAByAGkAdgBlAF8AVABvAHQAYQBsAEgAZQBhAGQAcwAiADoAIgAyADUANQAiACwAIgBXAGkAbgAzADIAXwBCAGEAcwBlAEIAbwBhAHIAZABfAE0AbwBkAGUAbAAiADoAIgAiACwAIgBXAGkAbgAzADIAXwBCAGEAcwBlAEIAbwBhAHIAZABfAE0AYQBuAHUAZgBhAGMAdAB1AHIAZQByACIAOgAiAEwARQBOAE8AVgBPACIALAAiAFcAaQBuADMAMgBfAEIAYQBzAGUAQgBvAGEAcgBkAF8ATgBhAG0AZQAiADoAIgBCAGEAcwBlACAAQgBvAGEAcgBkACIALAAiAFcAaQBuADMAMgBfAEIAYQBzAGUAQgBvAGEAcgBkAF8AUwBlAHIAaQBhAGwATgB1AG0AYgBlAHIAIgA6ACIAMQBaAFMAVQBCADQAQQBOADEANABEACIALAAiAFcAaQBuADMAMgBfAFYAaQBkAGUAbwBDAG8AbgB0AHIAbwBsAGwAZQByAF8ARAByAGkAdgBlAHIAVgBlAHIAcwBpAG8AbgAiADoAIgAxADAALgAxADgALgAxADQALgA0ADIANgA0ACIALAAiAFcAaQBuADMAMgBfAFYAaQBkAGUAbwBDAG8AbgB0AHIAbwBsAGwAZQByAF8ATgBhAG0AZQAiADoAIgBJAG4AdABlAGwAKABSACkAIABIAEQAIABHAHIAYQBwAGgAaQBjAHMAIAA0ADYAMAAwACIALAAiAFcAaQBuADMAMgBfAE4AZQB0AHcAbwByAGsAQQBkAGEAcAB0AGUAcgBDAG8AbgBmAGkAZwB1AHIAYQB0AGkAbwBuACIAOgAiADYAOAA6AEYANwA6ADIAOAA6ADEAMwA6AEMAMAA6AEMANwAiAH0AfQA=';
+
+    $path = sys_get_temp_dir() . '\\netphplicense.txt';
 
     $runtime = $this->GetTestRuntime();
-    $key = $runtime->ActivationCurrentKey();
-    if ($key == $good_key) {
-      $this->AssertTrue($runtime->ActivationValid());
+    $runtime->ActivationLicenseInitialize($path, TRUE);
+
+    $sample_key = $runtime->ActivationKeyGetSample();
+    $runtime->ActivationSetKey($sample_key);
+
+    $this->assertFalse($runtime->ActivationValid());
+
+    // Make sure we throw an exception, this is aggresive mode.
+    $message = '';
+    try {
+      $runtime->RegisterAssemblyFromFile(__FILE__, "alias");
     }
-  
-    $key = 'THIS IS THE ACTIVATION KEY';
+    catch (\Exception $e) {
+      $message = $e->getMessage();
+    }
+
+    $this->AssertTrue(stripos($message, 'Aggresive mode') !== FALSE);
+
     $runtime = new \NetPhp\Core\NetPhpRuntime();
     $runtime->Initialize();
-    $runtime->ActivationSetKey($key);
+    $runtime->ActivationLicenseInitialize($path, TRUE);
+    $runtime->ActivationSetKey($good_key);
     echo $runtime->ActivationValid();
 
     $runtime = new \NetPhp\Core\NetPhpRuntime();
     $runtime->Initialize();
+    $runtime->ActivationLicenseInitialize($path, TRUE);
     echo $runtime->ActivationGetCode();
 
-    $runtime->ActivationSetKey($bad_key);
+    $runtime->ActivationSetKey($sample_key);
     $this->AssertFalse($runtime->ActivationValid());
 
     $runtime->ActivationSetKey($good_key);
@@ -68,7 +84,7 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase {
     $runtime->ActivationClearCaches();
     $this->AssertTrue($runtime->ActivationValid());
 
-    $runtime->ActivationSetKey($bad_key);
+    $runtime->ActivationSetKey($sample_key);
     $this->AssertFalse($runtime->ActivationValid());
 
     $runtime->ActivationSetKey($good_key);
@@ -349,7 +365,7 @@ EOT;
 
     // Register .Net framework assemblies.
     $runtime = $this->GetTestRuntime();
-       
+
     // Very important tell our PHP class map
     // to use the runtime we have constructed!
     \NetPhp\ms\TypeMap::SetRuntime($runtime);

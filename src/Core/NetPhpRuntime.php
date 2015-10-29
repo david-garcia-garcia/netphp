@@ -6,7 +6,7 @@ use NetPhp\Core\MagicWrapper;
 
 /**
  * Runtime for NetPhp.
- * 
+ *
  * COM CLASS ID FOR THE 2.X VERSION OF THE BINARY: {2BF990C8-2680-474D-BDB4-65EEAEE0015F}
  */
 class NetPhpRuntime extends ComProxy {
@@ -36,7 +36,7 @@ class NetPhpRuntime extends ComProxy {
    * types do PHP natives get converted into by COM interop.
    *
    * @param mixed $object
-   * 
+   *
    * @return string
    */
   public function GetTypeAsString($object) {
@@ -92,7 +92,7 @@ class NetPhpRuntime extends ComProxy {
 
   /**
    * Get the Environment.Version object.
-   * 
+   *
    * @return NetProxy
    */
   public function GetRuntimeVersion() {
@@ -111,13 +111,13 @@ class NetPhpRuntime extends ComProxy {
    * Get a type by providing the assembly name.
    *
    * @param string $className
-   * 
+   *
    * @param string $assemblyName
-   * 
+   *
    * @param string $proxy_class
-   * 
+   *
    * @param mixed $data
-   * 
+   *
    * @return mixed
    */
   public function TypeFromAssembly($className, $assemblyName, $proxy_class = NULL, $data = NULL) {
@@ -128,13 +128,13 @@ class NetPhpRuntime extends ComProxy {
    * Get a type by providing the assembly file name.
    *
    * @param string $className
-   * 
+   *
    * @param string $assemblyPath
-   * 
+   *
    * @param string $proxy_class
-   * 
+   *
    * @param mixed $data
-   * 
+   *
    * @return mixed
    */
   public function TypeFromFile($className, $assemblyPath, $proxy_class = NULL, $data = NULL) {
@@ -146,11 +146,11 @@ class NetPhpRuntime extends ComProxy {
    * must already be registered in the runtime.
    *
    * @param string $className
-   * 
+   *
    * @param string $proxy_class
-   * 
+   *
    * @param mixed $data
-   * 
+   *
    * @return mixed
    */
   public function TypeFromName($className, $proxy_class = NULL, $data = NULL) {
@@ -238,6 +238,20 @@ class NetPhpRuntime extends ComProxy {
   }
 
   /**
+   * If you know the progId of a COM type and what to include all the assembly
+   * it belongs to, use this.
+   * 
+   * For example, you can bring in the Whole Word interop assembly by using
+   * "word.application" as the progId.
+   * 
+   * @param string $progId 
+   */
+  public function RegisterAssemblyFromProgId($progId) {
+    // Preload this in the host.
+    $this->host->RegisterAssemblyFromProgId($progId);
+  }
+
+  /**
    * Register an assembly from the FQDN.
    *
    * @param string $assembly
@@ -321,12 +335,12 @@ class NetPhpRuntime extends ComProxy {
 
   /**
    * Get a report of the .Net registered assemblies and it's dependencies.
-   * 
+   *
    * Use this to detect dependencies between libraries that cannot be resolved.
    */
   public function GetAssemblyReport() {
     return MagicWrapper::Get($this->host->GetAssemblyReport())->GetPhpFromJson();
-  }  
+  }
 
 
   #region License Related Methods
@@ -347,8 +361,8 @@ class NetPhpRuntime extends ComProxy {
 
   /**
    * Set the activation key.
-   * 
-   * @param string $key 
+   *
+   * @param string $key
    */
   public function ActivationSetKey($key) {
     $this->host->ActivationSetKey($key);
@@ -369,6 +383,41 @@ class NetPhpRuntime extends ComProxy {
   public function ActivationClearCaches() {
     $this->host->ActivationClearCaches();
   }
+
+  /**
+   * Get location of the Activation File
+   */
+  public function ActivationLicenseLocation() {
+    return $this->host->ActivationLicenseLocation();
+  }
+
+  /**
+   * Initialize the license system and license path. You cannot call
+   * any license related methods until this has been called.
+   *
+   * @param string $file
+   *   Path to the license file. License files are automatically
+   *   generated and modified during runtime, so the process
+   *   must have read/write permissions on the file.
+   *   
+   * @param boolean $aggresive
+   *   Only for debug purposes, used to ALWAYS throw exception if
+   *   license is invalid.
+   */
+  public function ActivationLicenseInitialize($file, $aggresive = FALSE) {
+    $this->host->ActivationLicenseInitialize($file, $aggresive);
+  }
+
+  /**
+   * Get a demo KEY with a valid format used for testing purposes.
+   * 
+   * @return string
+   */
+  public function ActivationKeyGetSample() {
+    return $this->host->ActivationKeyGetSample();
+  }
+
+  
 
   #endregion
 }
