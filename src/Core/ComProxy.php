@@ -161,7 +161,7 @@ abstract class ComProxy {
       throw new \Exception('Could not instantiate COM class. Invalid syntax might meen that the COM component is simply not registered.', $e->getCode(), $e);
     }
     else {
-      throw new \Exception('Could not instantiate COM/DOTNET object. Try changing the Load User Profile property of your Application Pool settings.', $e->getCode(), $e);
+      throw new \Exception($e->getMessage() . ' Try changing the Load User Profile property of your Application Pool settings.', $e->getCode(), $e);
     }
   }
 }
