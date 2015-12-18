@@ -8,7 +8,7 @@ class MagicWrapperUtilities extends ComProxy {
 
   public static function GetInstance() {
     $instance = new MagicWrapperUtilities();
-    $instance->_InstantiateCOM(Constants::MWU_CLASS);
+    $instance->_InstantiateCOM(Constants::$MWU_CLASS);
     return $instance;
   }
   

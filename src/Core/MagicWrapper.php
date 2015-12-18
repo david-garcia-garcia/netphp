@@ -136,7 +136,7 @@ class MagicWrapper extends ComProxy {
     }
     
     // Make sure we have inited the binary MagicWrapper.
-    $this->_InstantiateCOM(Constants::MW_CLASS);
+    $this->_InstantiateCOM(Constants::$MW_CLASS);
     
     $assembly = $this->type_data->assemblyFullQualifiedName;
     if (file_exists($assembly)) {
