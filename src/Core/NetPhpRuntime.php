@@ -240,11 +240,11 @@ class NetPhpRuntime extends ComProxy {
   /**
    * If you know the progId of a COM type and what to include all the assembly
    * it belongs to, use this.
-   * 
+   *
    * For example, you can bring in the Whole Word interop assembly by using
    * "word.application" as the progId.
-   * 
-   * @param string $progId 
+   *
+   * @param string $progId
    */
   public function RegisterAssemblyFromProgId($progId) {
     // Preload this in the host.
@@ -342,6 +342,14 @@ class NetPhpRuntime extends ComProxy {
     return MagicWrapper::Get($this->host->GetAssemblyReport())->GetPhpFromJson();
   }
 
+  /**
+   * The runtime has to do cleanup tasks to get rid of old dll files
+   * that were locked due to concurrency issues.
+   */
+  public function Cron() {
+    $this->host->Cron();
+  }
+
 
   #region License Related Methods
 
@@ -399,7 +407,7 @@ class NetPhpRuntime extends ComProxy {
    *   Path to the license file. License files are automatically
    *   generated and modified during runtime, so the process
    *   must have read/write permissions on the file.
-   *   
+   *
    * @param boolean $aggresive
    *   Only for debug purposes, used to ALWAYS throw exception if
    *   license is invalid.
@@ -410,14 +418,14 @@ class NetPhpRuntime extends ComProxy {
 
   /**
    * Get a demo KEY with a valid format used for testing purposes.
-   * 
+   *
    * @return string
    */
   public function ActivationKeyGetSample() {
     return $this->host->ActivationKeyGetSample();
   }
 
-  
+
 
   #endregion
 }
