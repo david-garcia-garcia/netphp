@@ -351,6 +351,8 @@ class NetPhpRuntime extends ComProxy {
   }
 
 
+
+
   #region License Related Methods
 
   /**
@@ -425,7 +427,39 @@ class NetPhpRuntime extends ComProxy {
     return $this->host->ActivationKeyGetSample();
   }
 
+  /**
+   * Helper method to completely remove a COM component
+   * from the registry using its COM ID. To be able to run
+   * this method you should give the caller process enough
+   * permissions to be able to modify the system registry.
+   * 
+   * If you are having permission issues and are unable
+   * to run this method, setup a desktop project and
+   * copy the C# implementation from the source code.
+   *
+   * @param string[] $classes
+   *   An array of COM class identifiers such as:
+   *     "{8F952AD2-63A8-3D2C-BC15-C78FB902C616}",
+   *     "{8B2C194A-8C2A-324F-8CFD-73AD8E1E30ED}",
+   *     "{2D1896A6-6528-438C-9890-55778147D5BD}",
+   *     "{CC968291-7A4E-3A2F-8667-F67CE8F3BD36}",
+   *     "{129CCB19-A796-319A-926F-B57211846186}",
+   */
+  public function RegistryHellCleanup($classes) {
+    $this->host->RegistryHellCleanup();
+  }
 
+  /**
+   * Configure the temporary path that the runtime
+   * should use when it has issues to instantiate al library
+   * due to locked binary problems. If not set, the runtime
+   * will use the system default temporary path.
+   * 
+   * @param string $directory 
+   */
+  public function SetTempDirectory($directory) {
+    $this->host->SetTempDirectory($directory);
+  }
 
   #endregion
 }
