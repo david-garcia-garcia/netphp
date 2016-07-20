@@ -195,7 +195,7 @@ class MagicWrapper extends ComProxy {
    * Is the wrapped .Net instance null?
    */
   public function IsNull() {
-    $this->host->is_null();
+    return $this->host->is_null();
   }
 
   #region Iterator
