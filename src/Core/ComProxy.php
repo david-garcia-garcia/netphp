@@ -128,7 +128,7 @@ abstract class ComProxy {
    */
   protected function _InstantiateCOM($name) {
     try {
-      $this->host = new \COM($name);
+      $this->host = new \COM($name, NULL, \CP_UTF8);
     }
     catch (\Exception $e) {
       if (!class_exists('COM')) {
