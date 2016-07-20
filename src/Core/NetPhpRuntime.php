@@ -275,6 +275,7 @@ class NetPhpRuntime extends ComProxy {
    */
   public function RegisterNetFramework2() {
     $this->RegisterAssemblyFromFullQualifiedName("mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", "mscorlib");
+    $this->RegisterAssemblyFromFullQualifiedName("System.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", "System.Core");
     $this->RegisterAssemblyFromFullQualifiedName("System.Transactions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", "System.Transactions");
     $this->RegisterAssemblyFromFullQualifiedName("System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", "System.Data");
     $this->RegisterAssemblyFromFullQualifiedName("System.Security, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Security");
@@ -295,6 +296,7 @@ class NetPhpRuntime extends ComProxy {
    */
   public function RegisterNetFramework4() {
     $this->RegisterAssemblyFromFullQualifiedName("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", "mscorlib");
+    $this->RegisterAssemblyFromFullQualifiedName("System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", "System.Core");
     $this->RegisterAssemblyFromFullQualifiedName("System.Transactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", "System.Transactions");
     $this->RegisterAssemblyFromFullQualifiedName("System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", "System.Data");
     $this->RegisterAssemblyFromFullQualifiedName("System.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Security");
